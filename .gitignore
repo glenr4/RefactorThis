@@ -24,3 +24,6 @@ bin/
 Bin/
 obj/
 Obj/
+
+# Other
+*.log

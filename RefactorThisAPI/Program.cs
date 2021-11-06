@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using RefactorThis.API.Logging;
+using Serilog;
+using Serilog.Events;
 
 namespace RefactorThisAPI
 {
@@ -13,6 +10,20 @@ namespace RefactorThisAPI
     {
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+               .MinimumLevel.Debug()
+               .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+               .MinimumLevel.Override("System", LogEventLevel.Warning)
+               .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Warning)
+               .Enrich.FromLogContext()
+               .Enrich.With<ActivityEnricher>()
+               .WriteTo.File(
+                    "../logs/webapp.log",
+                    rollingInterval: RollingInterval.Day,
+                    rollOnFileSizeLimit: true,
+                    outputTemplate: "[{Timestamp:HH:mm:ss.fff} {Level}] {SourceContext} {Message:lj} {Exception}{NewLine}")
+               .CreateLogger();
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -21,6 +32,6 @@ namespace RefactorThisAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                }).UseSerilog();
     }
 }

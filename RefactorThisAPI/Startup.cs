@@ -6,18 +6,32 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RefactorThis.API.Logging;
 using RefactorThis.Application;
 using RefactorThis.Domain.Interfaces;
 using RefactorThis.Persistence.Sqlite;
+using Serilog;
 
 namespace RefactorThisAPI
 {
     public class Startup
     {
+        private ILoggerFactory _sqlLoggerFactory;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            _sqlLoggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddFilter((category, level) =>
+                            category == DbLoggerCategory.Database.Command.Name
+                            && level == LogLevel.Information)
+                        .AddConsole()   // when running from command prompt
+                        .AddDebug();    // when debugging from VS
+            });
         }
 
         public IConfiguration Configuration { get; }
@@ -25,9 +39,12 @@ namespace RefactorThisAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(Log.Logger);
+
             services.AddDbContext<RefactorThisDbContext>(options =>
             {
                 options.UseSqlite("Data Source=../App_Data/products.db;");
+                options.UseLoggerFactory(_sqlLoggerFactory);
             });
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -42,6 +59,8 @@ namespace RefactorThisAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<RequestLogger>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
