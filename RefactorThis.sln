@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefactorThisAPI", "RefactorThisAPI\RefactorThisAPI.csproj", "{6CAAD6DF-046A-4924-8949-96D55B975716}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CAAD6DF-046A-4924-8949-96D55B975716}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CAAD6DF-046A-4924-8949-96D55B975716}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CAAD6DF-046A-4924-8949-96D55B975716}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CAAD6DF-046A-4924-8949-96D55B975716}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C1DA524B-9DD1-47B8-91D8-27B6A60495C1}
+	EndGlobalSection
+EndGlobal
