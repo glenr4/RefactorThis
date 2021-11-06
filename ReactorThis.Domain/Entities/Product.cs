@@ -16,9 +16,9 @@ namespace RefactorThis.Domain.Entities
 
         public Product(string name, string description, decimal price, decimal deliveryPrice)
         {
-            Id = new Guid();
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Description = description ?? throw new ArgumentNullException(nameof(description));
+            Id = Guid.NewGuid();
+            Name = !string.IsNullOrWhiteSpace(name) ? name : throw new ArgumentException(nameof(name));
+            Description = !string.IsNullOrWhiteSpace(description) ? description : throw new ArgumentException(nameof(description));
             Price = price >= 0 ? price : throw new NegativeNumberInvalidException(nameof(Price));
             DeliveryPrice = deliveryPrice >= 0 ? deliveryPrice : throw new NegativeNumberInvalidException(nameof(DeliveryPrice));
             _productOptions = new List<ProductOption>();

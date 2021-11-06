@@ -12,7 +12,7 @@ namespace RefactorThis.Domain.Entities
 
         public ProductOption(Guid productId, string name, string description)
         {
-            Id = new Guid();
+            Id = Guid.NewGuid();
             ProductId = productId;
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Description = description ?? throw new ArgumentNullException(nameof(description));
