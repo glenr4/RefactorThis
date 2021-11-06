@@ -4,6 +4,8 @@ namespace RefactorThis.Domain.Entities
 {
     public class ProductOption
     {
+        // This is only necessary for EF Core to instantiate objects. This was included in the
+        // Domain to avoid needing to create Data Transfer Objects.
         private ProductOption()
         {
         }

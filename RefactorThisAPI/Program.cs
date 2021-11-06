@@ -17,6 +17,7 @@ namespace RefactorThisAPI
                .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Warning)
                .Enrich.FromLogContext()
                .Enrich.With<ActivityEnricher>()
+               // TODO: change to cloud based logging sink
                .WriteTo.File(
                     "../logs/webapp.log",
                     rollingInterval: RollingInterval.Day,

@@ -8,6 +8,8 @@ namespace RefactorThis.Domain.Entities
     public class Product
 
     {
+        // This is only necessary for EF Core to instantiate objects. This was included in the
+        // Domain to avoid needing to create Data Transfer Objects.
         private Product()
         {
         }
@@ -35,9 +37,9 @@ namespace RefactorThis.Domain.Entities
         private readonly List<ProductOption> _productOptions;
         public IReadOnlyCollection<ProductOption> ProductOptions => _productOptions;
 
-        public void AddProductOption(string name, string description, Guid? productOptionId = null)
+        public void AddProductOption(string name, string description)
         {
-            _productOptions.Add(new ProductOption(productOptionId, this.Id, name, description));
+            _productOptions.Add(new ProductOption(this.Id, name, description));
         }
 
         public void RemoveProductOption(Guid Id)

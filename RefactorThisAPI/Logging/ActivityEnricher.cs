@@ -4,6 +4,8 @@ using System.Diagnostics;
 
 namespace RefactorThis.API.Logging
 {
+    // Fix for TraceId enrichment in .Net5.0
+    // https://github.com/serilog/serilog-aspnetcore/issues/207#issuecomment-702665756
     public class ActivityEnricher : ILogEventEnricher
     {
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
