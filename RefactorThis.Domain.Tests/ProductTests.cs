@@ -3,7 +3,6 @@ using FluentAssertions;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Exceptions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -119,7 +118,7 @@ namespace RefactorThis.Domain.Tests
             Action act = () => product.RemoveProductOption(Guid.NewGuid());
 
             // Assert
-            act.Should().Throw<KeyNotFoundException>();
+            act.Should().Throw<ProductNotFoundException>();
             product.ProductOptions.Should().HaveCount(3);
         }
     }

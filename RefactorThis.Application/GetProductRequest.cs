@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using RefactorThis.Domain.Entities;
+using RefactorThis.Domain.Exceptions;
 using RefactorThis.Domain.Interfaces;
 using System;
 using System.Threading;
@@ -20,9 +21,11 @@ namespace RefactorThis.Application
                 _productRepository = productRepository;
             }
 
-            public Task<Product> Handle(GetProductRequest request, CancellationToken cancellationToken)
+            public async Task<Product> Handle(GetProductRequest request, CancellationToken cancellationToken)
             {
-                return _productRepository.GetProduct(request.Id);
+                var result = await _productRepository.GetProduct(request.Id);
+
+                return result ?? throw new ProductNotFoundException(request.Id.ToString());
             }
         }
     }

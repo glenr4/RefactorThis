@@ -17,6 +17,11 @@ namespace RefactorThis.Persistence.Sqlite
             this._context = context;
         }
 
+        public Task<Product> GetProduct(Guid id)
+        {
+            return _context.Products.Where(p => p.Id == id).Include(p => p.ProductOptions).FirstOrDefaultAsync();
+        }
+
         public async Task<Product> CreateProduct(Product product)
         {
             _context.Products.Add(product);
@@ -42,11 +47,6 @@ namespace RefactorThis.Persistence.Sqlite
             await _context.SaveChangesAsync();
 
             return productOption;
-        }
-
-        public Task<Product> GetProduct(Guid id)
-        {
-            return _context.Products.Where(p => p.Id == id).Include(p => p.ProductOptions).FirstOrDefaultAsync();
         }
     }
 }

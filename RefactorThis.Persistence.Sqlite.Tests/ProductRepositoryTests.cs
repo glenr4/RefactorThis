@@ -2,6 +2,7 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using RefactorThis.Domain.Entities;
+using RefactorThis.Persistence.Sqlite.Exceptions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,52 @@ namespace RefactorThis.Persistence.Sqlite.Tests
         public ProductRepositoryTests()
         {
             _fixture = new Fixture();
+        }
+
+        [Fact]
+        public async Task GivenProductExists_WhenGetProduct_ThenProductReturned()
+        {
+            // Arrange
+            var product = _fixture.Create<Product>();
+
+            using (var context = CreateDbContext())
+            {
+                context.Products.Add(product);
+
+                context.SaveChanges();
+            }
+
+            // Act
+            using (var context = CreateDbContext())
+            {
+                var productRepository = CreateProductRepository(context);
+
+                var result = await productRepository.GetProduct(product.Id);
+
+                // Assert
+                result.Should().BeEquivalentTo(product);
+            }
+        }
+
+        [Fact]
+        public async Task WhenCreateProduct_ThenProductCreated()
+        {
+            // Arrange
+            var product = _fixture.Create<Product>();
+
+            // Act
+            using (var context = CreateDbContext())
+            {
+                var productRepository = CreateProductRepository(context);
+
+                var result = await productRepository.CreateProduct(product);
+
+                // Assert
+                result.Should().BeEquivalentTo(product);
+
+                var actualResult = context.Products.Where(p => p.Id == product.Id).FirstOrDefault();
+                actualResult.Should().BeEquivalentTo(product);
+            }
         }
 
         [Fact]
@@ -48,15 +95,48 @@ namespace RefactorThis.Persistence.Sqlite.Tests
         }
 
         [Fact]
-        public void GivenProductIdDoesNotMatch_WhenCreateProductOption_ThenThrowsException()
+        public async Task GivenProductIdDoesNotMatch_WhenCreateProductOption_ThenThrowsException()
         {
-            throw new NotImplementedException();
+            // Arrange
+            var product = _fixture.Create<Product>();
+
+            using (var context = CreateDbContext())
+            {
+                context.Products.Add(product);
+
+                context.SaveChanges();
+            }
+
+            // Act
+            var productOption = new ProductOption(Guid.NewGuid(), _fixture.Create<string>(), _fixture.Create<string>());
+            using (var context = CreateDbContext())
+            {
+                var productRepository = CreateProductRepository(context);
+
+                Func<Task> act = async () => await productRepository.CreateProductOption(product.Id, productOption);
+
+                // Assert
+                await act.Should().ThrowAsync<ProductIdMismatchException>();
+            }
         }
 
         [Fact]
-        public void GivenProductDoesNotExist_WhenCreateProductOption_ThenThrowsException()
+        public async Task GivenProductDoesNotExist_WhenCreateProductOption_ThenThrowsException()
         {
-            throw new NotImplementedException();
+            // Arrange
+            var product = _fixture.Create<Product>();
+
+            // Act
+            var productOption = new ProductOption(product.Id, _fixture.Create<string>(), _fixture.Create<string>());
+            using (var context = CreateDbContext())
+            {
+                var productRepository = CreateProductRepository(context);
+
+                Func<Task> act = async () => await productRepository.CreateProductOption(product.Id, productOption);
+
+                // Assert
+                await act.Should().ThrowAsync<DbUpdateException>();
+            }
         }
 
         private RefactorThisDbContext CreateDbContext()

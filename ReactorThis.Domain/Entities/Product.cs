@@ -42,11 +42,11 @@ namespace RefactorThis.Domain.Entities
             _productOptions.Add(new ProductOption(this.Id, name, description));
         }
 
-        public void RemoveProductOption(Guid Id)
+        public void RemoveProductOption(Guid id)
         {
-            var productOption = _productOptions.Where(po => po.Id == Id).FirstOrDefault();
+            var productOption = _productOptions.Where(po => po.Id == id).FirstOrDefault();
 
-            if (productOption == null) throw new KeyNotFoundException();
+            if (productOption == null) throw new ProductNotFoundException(id.ToString());
 
             _productOptions.Remove(productOption);
         }
