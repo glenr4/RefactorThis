@@ -6,6 +6,9 @@ namespace RefactorThis.Domain.Interfaces
 {
     public interface IProductRepository
     {
-        public Task<Product> GetProduct(Guid id);
+        Task<Product> GetProduct(Guid id);
+
+        Task<Product> CreateProduct(Product product);
+        Task<ProductOption> CreateProductOption(Guid productId, ProductOption productOption);
     }
 }

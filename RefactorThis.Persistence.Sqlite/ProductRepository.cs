@@ -16,6 +16,33 @@ namespace RefactorThis.Persistence.Sqlite
             this._context = context;
         }
 
+        public async Task<Product> CreateProduct(Product product)
+        {
+            _context.Products.Add(product);
+
+            await _context.SaveChangesAsync();
+
+            return product;
+        }
+
+        public async Task<ProductOption> CreateProductOption(Guid productId, ProductOption productOption)
+        {
+            if (productId != productOption.ProductId) throw new ProductIdMismatchException(productId.ToString());
+
+            // Due to the SQlite database not being confirgured with a many to one relationship between ProductOptions
+            // and Product, then need to check that the Product exists here first.
+            // TODO: either recreate the tables with the constraint or ensure it is done when upgrading to another database type.
+            var product = await _context.Products.Where(p => p.Id == productId).FirstOrDefaultAsync();
+
+            if (product == null) throw new DbUpdateException($"Product with Id: {productId} does not exist");
+
+            _context.ProductOptions.Add(productOption);
+
+            await _context.SaveChangesAsync();
+
+            return productOption;
+        }
+
         public Task<Product> GetProduct(Guid id)
         {
             return _context.Products.Where(p => p.Id == id).Include(p => p.ProductOptions).FirstOrDefaultAsync();

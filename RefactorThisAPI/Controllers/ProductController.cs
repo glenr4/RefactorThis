@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace RefactorThis.API.Controllers
 {
-    [Route("[controller]")]
+    // Normally I would use [Route("[controller]")] but the readme asks for the endpoint to be plural not singular
+    [Route("products")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -26,16 +27,15 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Product> Get(Guid id)
+        public Task<Product> GetProduct(Guid id)
         {
-            var test = await _mediator.Send(new GetProductRequest { Id = id });
-
-            return test;
+            return _mediator.Send(new GetProductRequest { Id = id });
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public Task<Product> CreateProduct([FromBody] Product product)
         {
+            return _mediator.Send(new CreateProductRequest { Product = product });
         }
 
         [HttpPut("{id}")]
@@ -46,6 +46,12 @@ namespace RefactorThis.API.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpPost("{id}/options")]
+        public Task<ProductOption> CreateProductOption(Guid id, [FromBody] ProductOption productOption)
+        {
+            return _mediator.Send(new CreateProductOptionRequest { ProductId = id, ProductOption = productOption });
         }
     }
 }
