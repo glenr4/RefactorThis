@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using RefactorThis.Application.DTOs;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Interfaces;
 using System.Threading;
@@ -8,7 +9,7 @@ namespace RefactorThis.Application
 {
     public class UpdateProductRequest : IRequest<Product>
     {
-        public Product Product { get; set; }
+        public ProductDto Product { get; set; }
 
         public class Handler : IRequestHandler<UpdateProductRequest, Product>
         {
@@ -21,7 +22,9 @@ namespace RefactorThis.Application
 
             public Task<Product> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
             {
-                return _productRepository.UpdateProductAsync(request.Product);
+                var product = ProductDtoMapper.FromDto(request.Product);
+
+                return _productRepository.UpdateProductAsync(product);
             }
         }
     }

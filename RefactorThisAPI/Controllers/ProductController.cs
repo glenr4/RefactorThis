@@ -41,7 +41,7 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public Task<Product> Put(Guid id, [FromBody] Product product)
+        public Task<Product> Put(Guid id, [FromBody] ProductDto product)
         {
             if (id != product.Id) throw new ProductIdMismatchException(id.ToString());
 

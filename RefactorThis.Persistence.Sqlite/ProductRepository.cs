@@ -55,7 +55,10 @@ namespace RefactorThis.Persistence.Sqlite
 
             await _context.SaveChangesAsync();
 
-            return product;
+            // Return ProductOptions explicitly, otherwise the requester may think that they have been deleted if an empty array is returned
+            var updatedProduct = await _context.Products.Where(p => p.Id == product.Id).Include(p => p.ProductOptions).FirstOrDefaultAsync();
+
+            return updatedProduct;
         }
     }
 }

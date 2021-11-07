@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using RefactorThis.Application.DTOs;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Interfaces;
@@ -23,9 +22,7 @@ namespace RefactorThis.Application
 
             public Task<Product> Handle(CreateProductRequest request, CancellationToken cancellationToken)
             {
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDto, Product>());
-                var mapper = new Mapper(config);
-                var product = mapper.Map<Product>(request.Product);
+                var product = ProductDtoMapper.FromDto(request.Product);
 
                 return _productRepository.CreateProductAsync(product);
             }
