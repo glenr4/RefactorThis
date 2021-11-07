@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Interfaces;
+using RefactorThis.Persistence.Sqlite.Exceptions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,8 +30,8 @@ namespace RefactorThis.Persistence.Sqlite
         {
             if (productId != productOption.ProductId) throw new ProductIdMismatchException(productId.ToString());
 
-            // Due to the SQlite database not being confirgured with a many to one relationship between ProductOptions
-            // and Product, then need to check that the Product exists here first.
+            // The SQlite database has not been confirgured with a many to one relationship between ProductOptions
+            // and Product, so need to check that the Product exists here first.
             // TODO: either recreate the tables with the constraint or ensure it is done when upgrading to another database type.
             var product = await _context.Products.Where(p => p.Id == productId).FirstOrDefaultAsync();
 

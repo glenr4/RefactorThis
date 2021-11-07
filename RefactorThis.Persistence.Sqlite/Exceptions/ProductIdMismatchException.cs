@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RefactorThis.Persistence.Sqlite
+namespace RefactorThis.Persistence.Sqlite.Exceptions
 {
     public class ProductIdMismatchException : ArgumentException
     {
