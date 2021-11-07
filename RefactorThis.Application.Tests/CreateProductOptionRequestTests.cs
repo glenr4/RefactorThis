@@ -3,7 +3,6 @@ using FluentAssertions;
 using Moq;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Interfaces;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -25,10 +24,9 @@ namespace RefactorThis.Application.Tests
         public async Task GivenProductExists_WhenRequest_ThenReturnProduct()
         {
             // Arrange
-            var id = Guid.NewGuid();
             var productOption = _fixture.Create<ProductOption>();
-            _productRepository.Setup(p => p.CreateProductOptionAsync(It.IsAny<Guid>(), It.IsAny<ProductOption>())).ReturnsAsync(productOption);
-            var request = new CreateProductOptionRequest { ProductId = id, ProductOption = productOption };
+            _productRepository.Setup(p => p.CreateProductOptionAsync(It.IsAny<ProductOption>())).ReturnsAsync(productOption);
+            var request = new CreateProductOptionRequest { ProductOption = productOption };
             var handler = new CreateProductOptionRequest.Handler(_productRepository.Object);
 
             // Act
@@ -36,7 +34,7 @@ namespace RefactorThis.Application.Tests
 
             // Assert
             result.Should().Be(productOption);
-            _productRepository.Verify(p => p.CreateProductOptionAsync(id, productOption), Times.Once());
+            _productRepository.Verify(p => p.CreateProductOptionAsync(productOption), Times.Once());
         }
     }
 }

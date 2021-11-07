@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RefactorThis.API.Exceptions;
 using RefactorThis.Application;
 using RefactorThis.Domain.Entities;
 using System;
@@ -39,8 +40,9 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(Guid id, [FromBody] Product product)
         {
+            //return _mediator.Send(new UpdateProductRequest { Product = product });
         }
 
         [HttpDelete("{id}")]
@@ -51,7 +53,9 @@ namespace RefactorThis.API.Controllers
         [HttpPost("{id}/options")]
         public Task<ProductOption> CreateProductOption(Guid id, [FromBody] ProductOption productOption)
         {
-            return _mediator.Send(new CreateProductOptionRequest { ProductId = id, ProductOption = productOption });
+            if (id != productOption.ProductId) throw new ProductIdMismatchException(id.ToString());
+
+            return _mediator.Send(new CreateProductOptionRequest { ProductOption = productOption });
         }
     }
 }

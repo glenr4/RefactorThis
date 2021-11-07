@@ -3,7 +3,6 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Exceptions;
-using RefactorThis.Persistence.Sqlite.Exceptions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -102,39 +101,13 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             {
                 var productRepository = CreateProductRepository(context);
 
-                var result = await productRepository.CreateProductOptionAsync(product.Id, productOption);
+                var result = await productRepository.CreateProductOptionAsync(productOption);
 
                 // Assert
                 result.Should().BeEquivalentTo(productOption);
 
                 var actualResult = context.ProductOptions.Where(po => po.Id == productOption.Id).FirstOrDefault();
                 actualResult.Should().BeEquivalentTo(productOption);
-            }
-        }
-
-        [Fact]
-        public async Task GivenProductIdDoesNotMatch_WhenCreateProductOption_ThenThrowsException()
-        {
-            // Arrange
-            var product = _fixture.Create<Product>();
-
-            using (var context = CreateDbContext())
-            {
-                context.Products.Add(product);
-
-                context.SaveChanges();
-            }
-
-            // Act
-            var productOption = new ProductOption(Guid.NewGuid(), _fixture.Create<string>(), _fixture.Create<string>());
-            using (var context = CreateDbContext())
-            {
-                var productRepository = CreateProductRepository(context);
-
-                Func<Task> act = async () => await productRepository.CreateProductOptionAsync(product.Id, productOption);
-
-                // Assert
-                await act.Should().ThrowAsync<ProductIdMismatchException>();
             }
         }
 
@@ -150,7 +123,7 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             {
                 var productRepository = CreateProductRepository(context);
 
-                Func<Task> act = async () => await productRepository.CreateProductOptionAsync(product.Id, productOption);
+                Func<Task> act = async () => await productRepository.CreateProductOptionAsync(productOption);
 
                 // Assert
                 await act.Should().ThrowAsync<DbUpdateException>();

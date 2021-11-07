@@ -13,4 +13,8 @@
     <ProjectReference Include="..\ReactorThis.Domain\RefactorThis.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+
 </Project>

@@ -10,6 +10,6 @@ namespace RefactorThis.Domain.Interfaces
 
         Task<Product> CreateProductAsync(Product product);
 
-        Task<ProductOption> CreateProductOptionAsync(Guid productId, ProductOption productOption);
+        Task<ProductOption> CreateProductOptionAsync(ProductOption productOption);
     }
 }
