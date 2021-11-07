@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RefactorThis.API.Exceptions;
 using RefactorThis.Application;
+using RefactorThis.Application.DTOs;
 using RefactorThis.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpPost]
-        public Task<Product> CreateProduct([FromBody] Product product)
+        public Task<Product> CreateProduct([FromBody] ProductDto product)
         {
             return _mediator.Send(new CreateProductRequest { Product = product });
         }

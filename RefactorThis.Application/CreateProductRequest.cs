@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using RefactorThis.Application.DTOs;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Interfaces;
 using System.Threading;
@@ -8,7 +10,7 @@ namespace RefactorThis.Application
 {
     public class CreateProductRequest : IRequest<Product>
     {
-        public Product Product { get; set; }
+        public ProductDto Product { get; set; }
 
         public class Handler : IRequestHandler<CreateProductRequest, Product>
         {
@@ -21,7 +23,11 @@ namespace RefactorThis.Application
 
             public Task<Product> Handle(CreateProductRequest request, CancellationToken cancellationToken)
             {
-                return _productRepository.CreateProductAsync(request.Product);
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDto, Product>());
+                var mapper = new Mapper(config);
+                var product = mapper.Map<Product>(request.Product);
+
+                return _productRepository.CreateProductAsync(product);
             }
         }
     }

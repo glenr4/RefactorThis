@@ -10,9 +10,9 @@ namespace RefactorThis.Domain.Entities
         {
         }
 
-        public ProductOption(Guid productId, string name, string description)
+        public ProductOption(Guid productId, string name, string description, Guid? id = null)
         {
-            Id = Guid.NewGuid();
+            Id = id ?? Guid.NewGuid();
             ProductId = productId != Guid.Empty ? productId : throw new ArgumentException(nameof(ProductId));
             Name = !string.IsNullOrWhiteSpace(name) ? name : throw new ArgumentException(nameof(name));
             Description = !string.IsNullOrWhiteSpace(description) ? description : throw new ArgumentException(nameof(description));
