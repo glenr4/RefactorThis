@@ -23,7 +23,7 @@ namespace RefactorThis.Application
 
             public Task<ProductOption> Handle(CreateProductOptionRequest request, CancellationToken cancellationToken)
             {
-                return _ProductOptionRepository.CreateProductOption(request.ProductId, request.ProductOption);
+                return _ProductOptionRepository.CreateProductOptionAsync(request.ProductId, request.ProductOption);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RefactorThis.Domain.Entities;
+using RefactorThis.Domain.Exceptions;
 using RefactorThis.Domain.Interfaces;
 using RefactorThis.Persistence.Sqlite.Exceptions;
 using System;
@@ -17,12 +18,14 @@ namespace RefactorThis.Persistence.Sqlite
             this._context = context;
         }
 
-        public Task<Product> GetProduct(Guid id)
+        public async Task<Product> GetProductAsync(Guid id)
         {
-            return _context.Products.Where(p => p.Id == id).Include(p => p.ProductOptions).FirstOrDefaultAsync();
+            var result = await _context.Products.Where(p => p.Id == id).Include(p => p.ProductOptions).FirstOrDefaultAsync();
+
+            return result ?? throw new ProductNotFoundException(id.ToString());
         }
 
-        public async Task<Product> CreateProduct(Product product)
+        public async Task<Product> CreateProductAsync(Product product)
         {
             _context.Products.Add(product);
 
@@ -31,7 +34,7 @@ namespace RefactorThis.Persistence.Sqlite
             return product;
         }
 
-        public async Task<ProductOption> CreateProductOption(Guid productId, ProductOption productOption)
+        public async Task<ProductOption> CreateProductOptionAsync(Guid productId, ProductOption productOption)
         {
             if (productId != productOption.ProductId) throw new ProductIdMismatchException(productId.ToString());
 

@@ -2,6 +2,7 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using RefactorThis.Domain.Entities;
+using RefactorThis.Domain.Exceptions;
 using RefactorThis.Persistence.Sqlite.Exceptions;
 using System;
 using System.Linq;
@@ -37,10 +38,27 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             {
                 var productRepository = CreateProductRepository(context);
 
-                var result = await productRepository.GetProduct(product.Id);
+                var result = await productRepository.GetProductAsync(product.Id);
 
                 // Assert
                 result.Should().BeEquivalentTo(product);
+            }
+        }
+
+        [Fact]
+        public async Task GivenProductDoesNotExist_WhenGetProduct_ThenThrowException()
+        {
+            // Arrange
+
+            // Act
+            using (var context = CreateDbContext())
+            {
+                var productRepository = CreateProductRepository(context);
+
+                Func<Task> act = async () => await productRepository.GetProductAsync(Guid.NewGuid());
+
+                // Assert
+                await act.Should().ThrowAsync<ProductNotFoundException>();
             }
         }
 
@@ -55,7 +73,7 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             {
                 var productRepository = CreateProductRepository(context);
 
-                var result = await productRepository.CreateProduct(product);
+                var result = await productRepository.CreateProductAsync(product);
 
                 // Assert
                 result.Should().BeEquivalentTo(product);
@@ -84,7 +102,7 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             {
                 var productRepository = CreateProductRepository(context);
 
-                var result = await productRepository.CreateProductOption(product.Id, productOption);
+                var result = await productRepository.CreateProductOptionAsync(product.Id, productOption);
 
                 // Assert
                 result.Should().BeEquivalentTo(productOption);
@@ -113,7 +131,7 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             {
                 var productRepository = CreateProductRepository(context);
 
-                Func<Task> act = async () => await productRepository.CreateProductOption(product.Id, productOption);
+                Func<Task> act = async () => await productRepository.CreateProductOptionAsync(product.Id, productOption);
 
                 // Assert
                 await act.Should().ThrowAsync<ProductIdMismatchException>();
@@ -132,7 +150,7 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             {
                 var productRepository = CreateProductRepository(context);
 
-                Func<Task> act = async () => await productRepository.CreateProductOption(product.Id, productOption);
+                Func<Task> act = async () => await productRepository.CreateProductOptionAsync(product.Id, productOption);
 
                 // Assert
                 await act.Should().ThrowAsync<DbUpdateException>();

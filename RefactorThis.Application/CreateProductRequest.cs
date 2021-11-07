@@ -21,7 +21,7 @@ namespace RefactorThis.Application
 
             public Task<Product> Handle(CreateProductRequest request, CancellationToken cancellationToken)
             {
-                return _productRepository.CreateProduct(request.Product);
+                return _productRepository.CreateProductAsync(request.Product);
             }
         }
     }

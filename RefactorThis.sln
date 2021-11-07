@@ -20,7 +20,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		App_Data\products.db = App_Data\products.db
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefactorThis.Persistence.Sqlite.Tests", "RefactorThis.Persistence.Sqlite.Tests\RefactorThis.Persistence.Sqlite.Tests.csproj", "{3D6D31CC-B054-4308-8487-E57CB36C2AFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefactorThis.Persistence.Sqlite.Tests", "RefactorThis.Persistence.Sqlite.Tests\RefactorThis.Persistence.Sqlite.Tests.csproj", "{3D6D31CC-B054-4308-8487-E57CB36C2AFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefactorThis.Application.Tests", "RefactorThis.Application.Tests\RefactorThis.Application.Tests.csproj", "{02736BC3-7778-42CE-BB76-FF751C60276A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{3D6D31CC-B054-4308-8487-E57CB36C2AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D6D31CC-B054-4308-8487-E57CB36C2AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D6D31CC-B054-4308-8487-E57CB36C2AFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02736BC3-7778-42CE-BB76-FF751C60276A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02736BC3-7778-42CE-BB76-FF751C60276A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02736BC3-7778-42CE-BB76-FF751C60276A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02736BC3-7778-42CE-BB76-FF751C60276A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
