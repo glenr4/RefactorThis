@@ -40,9 +40,11 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody] Product product)
+        public Task<Product> Put(Guid id, [FromBody] Product product)
         {
-            //return _mediator.Send(new UpdateProductRequest { Product = product });
+            if (id != product.Id) throw new ProductIdMismatchException(id.ToString());
+
+            return _mediator.Send(new UpdateProductRequest { Product = product });
         }
 
         [HttpDelete("{id}")]

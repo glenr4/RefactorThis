@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Exceptions;
 using RefactorThis.Domain.Interfaces;
@@ -47,6 +47,15 @@ namespace RefactorThis.Persistence.Sqlite
             await _context.SaveChangesAsync();
 
             return productOption;
+        }
+
+        public async Task<Product> UpdateProductAsync(Product product)
+        {
+            _context.Products.Update(product);
+
+            await _context.SaveChangesAsync();
+
+            return product;
         }
     }
 }
