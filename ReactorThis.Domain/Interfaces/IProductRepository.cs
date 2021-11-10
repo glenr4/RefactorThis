@@ -12,6 +12,6 @@ namespace RefactorThis.Domain.Interfaces
 
         Task<Product> UpdateProductAsync(Product product);
 
-        Task<ProductOption> CreateProductOptionAsync(ProductOption productOption);
+        Task<Product> DeleteProductAsync(Product product);
     }
 }

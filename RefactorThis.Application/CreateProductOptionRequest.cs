@@ -12,9 +12,9 @@ namespace RefactorThis.Application
 
         public class Handler : IRequestHandler<CreateProductOptionRequest, ProductOption>
         {
-            private readonly IProductRepository _ProductOptionRepository;
+            private readonly IProductOptionRepository _ProductOptionRepository;
 
-            public Handler(IProductRepository ProductOptionRepository)
+            public Handler(IProductOptionRepository ProductOptionRepository)
             {
                 _ProductOptionRepository = ProductOptionRepository;
             }

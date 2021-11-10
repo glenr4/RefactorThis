@@ -12,12 +12,12 @@ namespace RefactorThis.Application.Tests
     public class CreateProductOptionRequestTests
     {
         private Fixture _fixture;
-        private Mock<IProductRepository> _productRepository;
+        private Mock<IProductOptionRepository> _productOptionRepository;
 
         public CreateProductOptionRequestTests()
         {
             _fixture = new Fixture();
-            _productRepository = new Mock<IProductRepository>();
+            _productOptionRepository = new Mock<IProductOptionRepository>();
         }
 
         [Fact]
@@ -25,16 +25,16 @@ namespace RefactorThis.Application.Tests
         {
             // Arrange
             var productOption = _fixture.Create<ProductOption>();
-            _productRepository.Setup(p => p.CreateProductOptionAsync(It.IsAny<ProductOption>())).ReturnsAsync(productOption);
+            _productOptionRepository.Setup(p => p.CreateProductOptionAsync(It.IsAny<ProductOption>())).ReturnsAsync(productOption);
             var request = new CreateProductOptionRequest { ProductOption = productOption };
-            var handler = new CreateProductOptionRequest.Handler(_productRepository.Object);
+            var handler = new CreateProductOptionRequest.Handler(_productOptionRepository.Object);
 
             // Act
             var result = await handler.Handle(request, new CancellationToken());
 
             // Assert
             result.Should().Be(productOption);
-            _productRepository.Verify(p => p.CreateProductOptionAsync(productOption), Times.Once());
+            _productOptionRepository.Verify(p => p.CreateProductOptionAsync(productOption), Times.Once());
         }
     }
 }

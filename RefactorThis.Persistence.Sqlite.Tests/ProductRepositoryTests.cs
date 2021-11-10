@@ -108,54 +108,6 @@ namespace RefactorThis.Persistence.Sqlite.Tests
         }
 
         [Fact]
-        public async Task GivenProductExists_WhenCreateProductOption_ThenProductOptionAddedToProduct()
-        {
-            // Arrange
-            var product = _fixture.Create<Product>();
-
-            using (var context = CreateDbContext())
-            {
-                context.Products.Add(product);
-
-                context.SaveChanges();
-            }
-
-            // Act
-            var productOption = new ProductOption(product.Id, _fixture.Create<string>(), _fixture.Create<string>());
-            using (var context = CreateDbContext())
-            {
-                var productRepository = new ProductRepository(context);
-
-                var result = await productRepository.CreateProductOptionAsync(productOption);
-
-                // Assert
-                result.Should().BeEquivalentTo(productOption);
-
-                var actualResult = context.ProductOptions.Where(po => po.Id == productOption.Id).FirstOrDefault();
-                actualResult.Should().BeEquivalentTo(productOption);
-            }
-        }
-
-        [Fact]
-        public async Task GivenProductDoesNotExist_WhenCreateProductOption_ThenThrowsException()
-        {
-            // Arrange
-            var product = _fixture.Create<Product>();
-
-            // Act
-            var productOption = new ProductOption(product.Id, _fixture.Create<string>(), _fixture.Create<string>());
-            using (var context = CreateDbContext())
-            {
-                var productRepository = new ProductRepository(context);
-
-                Func<Task> act = async () => await productRepository.CreateProductOptionAsync(productOption);
-
-                // Assert
-                await act.Should().ThrowAsync<DbUpdateException>();
-            }
-        }
-
-        [Fact]
         public async Task GivenProductExists_WhenUpdateProduct_ThenProductUpdated()
         {
             // Arrange
@@ -184,6 +136,24 @@ namespace RefactorThis.Persistence.Sqlite.Tests
                 var updatedProduct = context.Products.Where(p => p.Id == existingProduct.Id).FirstOrDefault();
 
                 updatedProduct.Should().BeEquivalentTo(product);
+            }
+        }
+
+        [Fact]
+        public async Task GivenProductDoesNotExist_WhenUpdateProduct_ThenThrowException()
+        {
+            // Arrange
+            var product = _fixture.Create<Product>();
+
+            // Act
+            using (var context = CreateDbContext())
+            {
+                var productRepository = new ProductRepository(context);
+
+                Func<Task> act = async () => await productRepository.UpdateProductAsync(product);
+
+                // Assert
+                await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
             }
         }
 
