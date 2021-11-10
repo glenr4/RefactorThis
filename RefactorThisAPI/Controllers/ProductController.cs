@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace RefactorThis.API.Controllers
 {
-    // Normally I would use [Route("[controller]")] but the readme asks for the endpoint to be plural not singular
     [Route("products")]
     [ApiController]
     public class ProductController : ControllerBase
