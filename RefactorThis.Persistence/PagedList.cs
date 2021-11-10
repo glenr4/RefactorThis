@@ -13,8 +13,6 @@ namespace RefactorThis.Persistence
         public int TotalPages { get; private set; }
         public int PageSize { get; private set; }
         public int TotalCount { get; private set; }
-        public bool HasPrevious => CurrentPage > 1;
-        public bool HasNext => CurrentPage < TotalPages;
 
         private PagedList(List<T> items, int count, int pageNumber, int pageSize)
         {
