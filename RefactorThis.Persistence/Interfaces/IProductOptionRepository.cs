@@ -8,10 +8,12 @@ namespace RefactorThis.Persistence
     {
         Task<ProductOption> GetProductOptionAsync(Guid id);
 
-        Task<ProductOption> CreateProductOptionAsync(ProductOption product);
+        Task<ProductOption> CreateProductOptionAsync(ProductOption productOption);
 
-        Task<ProductOption> UpdateProductOptionAsync(ProductOption product);
+        Task<ProductOption> UpdateProductOptionAsync(ProductOption productOption);
 
-        Task<ProductOption> DeleteProductOptionAsync(ProductOption productOption);
+        Task<Guid> DeleteProductOptionAsync(Guid id);
+
+        Task<PagedList<ProductOption>> GetAllProductOptionsAsync(int page = 1, int pageSize = 10);
     }
 }
