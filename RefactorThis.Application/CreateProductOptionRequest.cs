@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using RefactorThis.Domain.Entities;
-using RefactorThis.Domain.Interfaces;
+using RefactorThis.Persistence;
 using System.Threading;
 using System.Threading.Tasks;
 

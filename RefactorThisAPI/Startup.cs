@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RefactorThis.API.Logging;
 using RefactorThis.Application;
-using RefactorThis.Domain.Interfaces;
+using RefactorThis.Persistence;
 using RefactorThis.Persistence.Sqlite;
 using Serilog;
 
@@ -54,6 +54,7 @@ namespace RefactorThisAPI
 
             services.AddMediatR(typeof(GetProductRequest).Assembly);
             services.TryAddScoped<IProductRepository, ProductRepository>();
+            services.TryAddScoped<IProductOptionRepository, ProductOptionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

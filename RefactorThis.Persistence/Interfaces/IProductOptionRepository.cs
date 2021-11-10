@@ -2,7 +2,7 @@ using RefactorThis.Domain.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace RefactorThis.Domain.Interfaces
+namespace RefactorThis.Persistence
 {
     public interface IProductOptionRepository
     {

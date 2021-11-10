@@ -2,7 +2,7 @@ using AutoFixture;
 using FluentAssertions;
 using Moq;
 using RefactorThis.Domain.Entities;
-using RefactorThis.Domain.Interfaces;
+using RefactorThis.Persistence;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

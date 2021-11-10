@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Exceptions;
-using RefactorThis.Domain.Interfaces;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +14,14 @@ namespace RefactorThis.Persistence.Sqlite
         public ProductRepository(RefactorThisDbContext context)
         {
             this._context = context;
+        }
+
+        public Task<PagedList<Product>> GetAllProductsAsync(int page = 1, int pageSize = 10)
+        {
+            return PagedList<Product>.ToPagedListAsync(
+                _context.QueryAll<Product>().OrderBy(p => p.Name),
+                page,
+                pageSize);
         }
 
         public async Task<Product> GetProductAsync(Guid id)

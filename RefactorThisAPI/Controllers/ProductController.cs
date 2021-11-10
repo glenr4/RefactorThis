@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using RefactorThis.API.Exceptions;
 using RefactorThis.Application;
 using RefactorThis.Domain.Entities;
+using RefactorThis.Persistence;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RefactorThis.API.Controllers
@@ -21,9 +21,9 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> GetAll()
+        public  Task<PagedList<Product>> GetAll([FromQuery] QueryParameters qp)
         {
-            return new string[] { "value1", "value2" };
+            return _mediator.Send(new GetAllProductsRequest { Page = qp.Page, PostsPerPage = qp.PostsPerPage });
         }
 
         [HttpGet("{id}")]

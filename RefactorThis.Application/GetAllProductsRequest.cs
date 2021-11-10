@@ -1,17 +1,17 @@
 ﻿using MediatR;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Persistence;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace RefactorThis.Application
 {
-    public class GetProductRequest : IRequest<Product>
+    public class GetAllProductsRequest : IRequest<PagedList<Product>>
     {
-        public Guid Id { get; set; }
+        public int Page { get; set; }
+        public int PostsPerPage { get; set; }
 
-        public class Handler : IRequestHandler<GetProductRequest, Product>
+        public class Handler : IRequestHandler<GetAllProductsRequest, PagedList<Product>>
         {
             private readonly IProductRepository _productRepository;
 
@@ -20,9 +20,9 @@ namespace RefactorThis.Application
                 _productRepository = productRepository;
             }
 
-            public Task<Product> Handle(GetProductRequest request, CancellationToken cancellationToken)
+            public Task<PagedList<Product>> Handle(GetAllProductsRequest request, CancellationToken cancellationToken)
             {
-                return _productRepository.GetProductAsync(request.Id);
+                return _productRepository.GetAllProductsAsync(request.Page, request.PostsPerPage);
             }
         }
     }

@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ReactorThis.Domain\RefactorThis.Domain.csproj" />
+    <ProjectReference Include="..\RefactorThis.Persistence\RefactorThis.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>

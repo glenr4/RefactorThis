@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using RefactorThis.Domain.Entities;
-using RefactorThis.Domain.Interfaces;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
