@@ -24,7 +24,7 @@ namespace RefactorThis.Domain.Tests
         [InlineData("name", null)]
         public void GivenStringArgumentEmpty_WhenConstructProductOption_ThenThrowsException(string name, string description)
         {
-            Action act = () => new ProductOption(Guid.NewGuid(), name, description);
+            Action act = () => new ProductOption(Guid.NewGuid(), Guid.NewGuid(), name, description);
 
             act.Should().Throw<ArgumentException>();
         }
@@ -32,7 +32,7 @@ namespace RefactorThis.Domain.Tests
         [Fact]
         public void GivenProductIdEmpty_WhenConstructProductOption_ThenThrowsException()
         {
-            Action act = () => new ProductOption(Guid.Empty, _fixture.Create<string>(), _fixture.Create<string>());
+            Action act = () => new ProductOption(Guid.NewGuid(), Guid.Empty, _fixture.Create<string>(), _fixture.Create<string>());
 
             act.Should().Throw<ArgumentException>();
         }
@@ -46,7 +46,7 @@ namespace RefactorThis.Domain.Tests
             var description = _fixture.Create<string>();
 
             // Act
-            var productOption = new ProductOption(productId, name, description);
+            var productOption = new ProductOption(Guid.NewGuid(), productId, name, description);
 
             // Assert
             productOption.Id.Should().NotBeEmpty();

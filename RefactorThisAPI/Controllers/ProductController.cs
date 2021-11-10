@@ -21,7 +21,7 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpGet]
-        public Task<PagedList<Product>> GetAll([FromQuery] QueryParameters qp)
+        public Task<PagedList<Product>> GetAllProducts([FromQuery] QueryParameters qp)
         {
             return _mediator.Send(new GetAllProductsRequest { Page = qp.Page, PostsPerPage = qp.PostsPerPage, Name = qp.Name });
         }
@@ -52,12 +52,38 @@ namespace RefactorThis.API.Controllers
             return _mediator.Send(new DeleteProductRequest { Id = id });
         }
 
+        [HttpGet("{id}/options")]
+        public Task<PagedList<ProductOption>> GetAllProductOptions([FromQuery] QueryParameters qp)
+        {
+            return _mediator.Send(new GetAllProductOptionsRequest { Page = qp.Page, PostsPerPage = qp.PostsPerPage });
+        }
+
+        [HttpGet("{id}/options/{optionId}")]
+        public Task<ProductOption> GetProductOption(Guid id, Guid optionId)
+        {
+            return _mediator.Send(new GetProductOptionRequest { ProductId = id, OptionId = optionId });
+        }
+
         [HttpPost("{id}/options")]
         public Task<ProductOption> CreateProductOption(Guid id, [FromBody] ProductOption productOption)
         {
             if (id != productOption.ProductId) throw new ProductIdMismatchException(id.ToString());
 
             return _mediator.Send(new CreateProductOptionRequest { ProductOption = productOption });
+        }
+
+        [HttpPut("{id}/options/{optionId}")]
+        public Task<ProductOption> UpdateProductOption(Guid id, Guid optionId, [FromBody] ProductOption productOption)
+        {
+            if (id != productOption.Id) throw new ProductIdMismatchException(id.ToString());
+
+            return _mediator.Send(new UpdateProductOptionRequest { ProductOption = productOption });
+        }
+
+        [HttpDelete("{id}/options/{optionId}")]
+        public Task DeleteProductOption(Guid id, Guid optionId)
+        {
+            return _mediator.Send(new DeleteProductOptionRequest { Id = id });
         }
     }
 }

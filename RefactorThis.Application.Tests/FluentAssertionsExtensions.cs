@@ -22,7 +22,7 @@ namespace RefactorThis.Application.Tests
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -45,7 +45,7 @@ namespace RefactorThis.Application.Tests
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

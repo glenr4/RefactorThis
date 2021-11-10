@@ -49,6 +49,6 @@ To run the tests and generate a coverage report, run the following commands from
 
 `dotnet test --collect:"Xplat Code Coverage"`
 
-`dotnet tool install -g dotnet-reportgenerator-globaltool`
+If not already installed: `dotnet tool install -g dotnet-reportgenerator-globaltool`
 
 `reportgenerator -reports:"./**/coverage.cobertura.xml" -targetdir:"./TestCoverageReport" -reporttypes:"html"`
