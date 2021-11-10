@@ -14,7 +14,7 @@ namespace RefactorThis.Persistence
         public int PageSize { get; private set; }
         public int TotalCount { get; private set; }
 
-        private PagedList(List<T> items, int count, int pageNumber, int pageSize)
+        protected PagedList(List<T> items, int count, int pageNumber, int pageSize)
         {
             Items = items;
             TotalCount = count;
