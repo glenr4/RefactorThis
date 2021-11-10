@@ -3,7 +3,6 @@ using FluentAssertions;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Exceptions;
 using System;
-using System.Linq;
 using Xunit;
 
 namespace RefactorThis.Domain.Tests
@@ -78,66 +77,6 @@ namespace RefactorThis.Domain.Tests
             product.Description.Should().Be(description);
             product.Price.Should().Be(price);
             product.DeliveryPrice.Should().Be(deliveryPrice);
-            product.ProductOptions.Should().NotBeNull();
-            product.ProductOptions.Should().BeEmpty();
-        }
-
-        [Fact]
-        public void GivenValidProductOptionArguments_WhenAddProductOption_ThenProductOptionAdded()
-        {
-            // Arrange
-            var product = _fixture.Create<Product>();
-            var name = _fixture.Create<string>();
-            var description = _fixture.Create<string>();
-
-            // Act
-            product.AddProductOption(name, description);
-
-            // Assert
-            product.ProductOptions.Should().ContainSingle();
-            var actualProductOption = product.ProductOptions.FirstOrDefault();
-            actualProductOption.Name.Should().Be(name);
-            actualProductOption.Description.Should().Be(description);
-            actualProductOption.ProductId.Should().Be(product.Id);
-        }
-
-        [Fact]
-        public void GivenProductOptionExists_WhenRemoveProductOption_ThenProductOptionRemoved()
-        {
-            // Arrange
-            var product = _fixture.Create<Product>();
-            product.AddProductOption(_fixture.Create<string>(), _fixture.Create<string>());
-            product.AddProductOption(_fixture.Create<string>(), _fixture.Create<string>());
-            product.AddProductOption(_fixture.Create<string>(), _fixture.Create<string>());
-
-            product.ProductOptions.Should().HaveCount(3);
-
-            // Act
-            var productOption = product.ProductOptions.FirstOrDefault();
-            product.RemoveProductOption(productOption.Id);
-
-            // Assert
-            product.ProductOptions.Should().HaveCount(2);
-            product.ProductOptions.Should().NotContain(x => x.Id == productOption.Id);
-        }
-
-        [Fact]
-        public void GivenProductOptionDoesNotExist_WhenRemoveProductOption_ThenThrowException()
-        {
-            // Arrange
-            var product = _fixture.Create<Product>();
-            product.AddProductOption(_fixture.Create<string>(), _fixture.Create<string>());
-            product.AddProductOption(_fixture.Create<string>(), _fixture.Create<string>());
-            product.AddProductOption(_fixture.Create<string>(), _fixture.Create<string>());
-
-            product.ProductOptions.Should().HaveCount(3);
-
-            // Act
-            Action act = () => product.RemoveProductOption(Guid.NewGuid());
-
-            // Assert
-            act.Should().Throw<ProductNotFoundException>();
-            product.ProductOptions.Should().HaveCount(3);
         }
     }
 }

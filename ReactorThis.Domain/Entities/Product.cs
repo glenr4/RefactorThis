@@ -1,12 +1,9 @@
 ﻿using RefactorThis.Domain.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace RefactorThis.Domain.Entities
 {
     public class Product
-
     {
         // This is only necessary for EF Core to instantiate objects. This was included in the
         // Domain to avoid needing to create Data Transfer Objects.
@@ -21,7 +18,6 @@ namespace RefactorThis.Domain.Entities
             Description = !string.IsNullOrWhiteSpace(description) ? description : throw new ArgumentException(nameof(description));
             Price = price >= 0 ? price : throw new NegativeNumberInvalidException(nameof(Price));
             DeliveryPrice = deliveryPrice >= 0 ? deliveryPrice : throw new NegativeNumberInvalidException(nameof(DeliveryPrice));
-            _productOptions = new List<ProductOption>();
         }
 
         public Guid Id { get; private set; }
@@ -33,22 +29,5 @@ namespace RefactorThis.Domain.Entities
         public decimal Price { get; private set; }
 
         public decimal DeliveryPrice { get; private set; }
-
-        private readonly List<ProductOption> _productOptions;
-        public IReadOnlyCollection<ProductOption> ProductOptions => _productOptions;
-
-        public void AddProductOption(string name, string description)
-        {
-            _productOptions.Add(new ProductOption(this.Id, name, description));
-        }
-
-        public void RemoveProductOption(Guid id)
-        {
-            var productOption = _productOptions.Where(po => po.Id == id).FirstOrDefault();
-
-            if (productOption == null) throw new ProductNotFoundException(id.ToString());
-
-            _productOptions.Remove(productOption);
-        }
     }
 }

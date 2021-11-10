@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RefactorThis.API.Exceptions;
 using RefactorThis.Application;
-using RefactorThis.Application.DTOs;
 using RefactorThis.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -23,7 +22,7 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<string> GetAll()
         {
             return new string[] { "value1", "value2" };
         }
@@ -35,13 +34,13 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpPost]
-        public Task<Product> CreateProduct([FromBody] ProductDto product)
+        public Task<Product> CreateProduct([FromBody] Product product)
         {
             return _mediator.Send(new CreateProductRequest { Product = product });
         }
 
         [HttpPut("{id}")]
-        public Task<Product> Put(Guid id, [FromBody] ProductDto product)
+        public Task<Product> Put(Guid id, [FromBody] Product product)
         {
             if (id != product.Id) throw new ProductIdMismatchException(id.ToString());
 

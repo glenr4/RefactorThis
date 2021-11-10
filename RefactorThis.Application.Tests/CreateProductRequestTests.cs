@@ -1,7 +1,6 @@
 using AutoFixture;
 using FluentAssertions;
 using Moq;
-using RefactorThis.Application.DTOs;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Interfaces;
 using System.Threading;
@@ -25,10 +24,9 @@ namespace RefactorThis.Application.Tests
         public async Task GivenProductExists_WhenRequest_ThenReturnProduct()
         {
             // Arrange
-            var productDto = _fixture.Create<ProductDto>();
-            var product = ProductMapper.FromDto(productDto);
+            var product = _fixture.Create<Product>();
             _productRepository.Setup(p => p.CreateProductAsync(It.IsAny<Product>())).ReturnsAsync(product);
-            var request = new CreateProductRequest { Product = productDto };
+            var request = new CreateProductRequest { Product = product };
             var handler = new CreateProductRequest.Handler(_productRepository.Object);
 
             // Act

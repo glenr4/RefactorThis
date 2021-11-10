@@ -35,7 +35,7 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             // Act
             using (var context = CreateDbContext())
             {
-                var productRepository = CreateProductRepository(context);
+                var productRepository = new ProductRepository(context);
 
                 var result = await productRepository.GetProductAsync(product.Id);
 
@@ -52,7 +52,7 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             // Act
             using (var context = CreateDbContext())
             {
-                var productRepository = CreateProductRepository(context);
+                var productRepository = new ProductRepository(context);
 
                 Func<Task> act = async () => await productRepository.GetProductAsync(Guid.NewGuid());
 
@@ -70,7 +70,7 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             // Act
             using (var context = CreateDbContext())
             {
-                var productRepository = CreateProductRepository(context);
+                var productRepository = new ProductRepository(context);
 
                 var result = await productRepository.CreateProductAsync(product);
 
@@ -79,6 +79,31 @@ namespace RefactorThis.Persistence.Sqlite.Tests
 
                 var actualResult = context.Products.Where(p => p.Id == product.Id).FirstOrDefault();
                 actualResult.Should().BeEquivalentTo(product);
+            }
+        }
+
+        [Fact]
+        public async Task GivenProductAlreadyExists_WhenCreateProduct_ThenThrowException()
+        {
+            // Arrange
+            var product = _fixture.Create<Product>();
+
+            using (var context = CreateDbContext())
+            {
+                context.Products.Add(product);
+
+                context.SaveChanges();
+            }
+
+            // Act
+            using (var context = CreateDbContext())
+            {
+                var productRepository = new ProductRepository(context);
+
+                Func<Task> act = async () => await productRepository.CreateProductAsync(product);
+
+                // Assert
+                await act.Should().ThrowAsync<DbUpdateException>();
             }
         }
 
@@ -99,7 +124,7 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             var productOption = new ProductOption(product.Id, _fixture.Create<string>(), _fixture.Create<string>());
             using (var context = CreateDbContext())
             {
-                var productRepository = CreateProductRepository(context);
+                var productRepository = new ProductRepository(context);
 
                 var result = await productRepository.CreateProductOptionAsync(productOption);
 
@@ -121,12 +146,44 @@ namespace RefactorThis.Persistence.Sqlite.Tests
             var productOption = new ProductOption(product.Id, _fixture.Create<string>(), _fixture.Create<string>());
             using (var context = CreateDbContext())
             {
-                var productRepository = CreateProductRepository(context);
+                var productRepository = new ProductRepository(context);
 
                 Func<Task> act = async () => await productRepository.CreateProductOptionAsync(productOption);
 
                 // Assert
                 await act.Should().ThrowAsync<DbUpdateException>();
+            }
+        }
+
+        [Fact]
+        public async Task GivenProductExists_WhenUpdateProduct_ThenProductUpdated()
+        {
+            // Arrange
+            var existingProduct = _fixture.Create<Product>();
+
+            using (var context = CreateDbContext())
+            {
+                context.Add(existingProduct);
+
+                context.SaveChanges();
+            }
+
+            // Act
+            var product = new Product(existingProduct.Id, _fixture.Create<string>(), _fixture.Create<string>(), _fixture.Create<decimal>(), _fixture.Create<decimal>());
+
+            using (var context = CreateDbContext())
+            {
+                var productRepository = new ProductRepository(context);
+
+                var result = await productRepository.UpdateProductAsync(product);
+            }
+
+            // Assert
+            using (var context = CreateDbContext())
+            {
+                var updatedProduct = context.Products.Where(p => p.Id == existingProduct.Id).FirstOrDefault();
+
+                updatedProduct.Should().BeEquivalentTo(product);
             }
         }
 
@@ -136,11 +193,6 @@ namespace RefactorThis.Persistence.Sqlite.Tests
                         new DbContextOptionsBuilder<RefactorThisDbContext>()
                             .UseInMemoryDatabase(databaseName: "inMemDb")
                             .Options);
-        }
-
-        private ProductRepository CreateProductRepository(RefactorThisDbContext context)
-        {
-            return new ProductRepository(context);
         }
     }
 }
