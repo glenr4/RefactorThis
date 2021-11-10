@@ -20,5 +20,7 @@
                 else _page = value;
             }
         }
+
+        public string Name { get; set; }
     }
 }

@@ -16,12 +16,19 @@ namespace RefactorThis.Persistence.Sqlite
             this._context = context;
         }
 
-        public Task<PagedList<Product>> GetAllProductsAsync(int page = 1, int pageSize = 10)
+        public Task<PagedList<Product>> GetAllProductsAsync(int page = 1, int pageSize = 10, string name = null)
         {
-            return PagedList<Product>.ToPagedListAsync(
-                _context.QueryAll<Product>().OrderBy(p => p.Name),
-                page,
-                pageSize);
+            var query = _context.QueryAll<Product>();
+            if (name != null)
+            {
+                query = query.Where(p => p.Name == name);
+            }
+            else
+            {
+                query = query.OrderBy(p => p.Name);
+            }
+
+            return PagedList<Product>.ToPagedListAsync(query, page, pageSize);
         }
 
         public async Task<Product> GetProductAsync(Guid id)

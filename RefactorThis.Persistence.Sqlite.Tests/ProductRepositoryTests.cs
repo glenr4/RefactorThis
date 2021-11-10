@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Domain.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -58,6 +59,121 @@ namespace RefactorThis.Persistence.Sqlite.Tests
 
                 // Assert
                 await act.Should().ThrowAsync<ProductNotFoundException>();
+            }
+        }
+
+        [Fact]
+        public async Task GivenProductsExist_WhenGetAllProducts_ThenPagedProductsReturned()
+        {
+            // Arrange
+            var products = new List<Product> {
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+            };
+
+            using (var context = CreateDbContext())
+            {
+                context.Products.AddRange(products);
+
+                context.SaveChanges();
+            }
+
+            // Act
+            using (var context = CreateDbContext())
+            {
+                var productRepository = new ProductRepository(context);
+
+                var result = await productRepository.GetAllProductsAsync(page: 1, pageSize: products.Count);
+
+                // Assert
+                result.Items.Should().BeEquivalentTo(products);
+                result.Should().BeOfType<PagedList<Product>>();
+            }
+        }
+
+        [Fact]
+        public async Task GivenNoProductsExist_WhenGetAllProducts_ThenEmptyPagedProductsReturned()
+        {
+            // Arrange
+
+            // Act
+            using (var context = CreateDbContext())
+            {
+                var productRepository = new ProductRepository(context);
+
+                var result = await productRepository.GetAllProductsAsync();
+
+                // Assert
+                result.Items.Should().BeEmpty();
+                result.Should().BeOfType<PagedList<Product>>();
+            }
+        }
+
+        [Fact]
+        public async Task GivenProductsExist_WhenGetAllProductsWithName_ThenPagedProductsReturnedWithName()
+        {
+            // Arrange
+            var products = new List<Product> {
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+            };
+
+            using (var context = CreateDbContext())
+            {
+                context.Products.AddRange(products);
+
+                context.SaveChanges();
+            }
+
+            // Act
+            using (var context = CreateDbContext())
+            {
+                var productRepository = new ProductRepository(context);
+
+                var result = await productRepository.GetAllProductsAsync(name: products[0].Name);
+
+                // Assert
+                result.Items.Should().BeEquivalentTo(new List<Product> { products[0] });
+                result.Should().BeOfType<PagedList<Product>>();
+            }
+        }
+
+        [Fact]
+        public async Task GivenProductsExist_WhenGetAllProductsWithNonExistingName_ThenEmptyPagedProductsReturned()
+        {
+            // Arrange
+            // Arrange
+            var products = new List<Product> {
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+                _fixture.Create<Product>(),
+            };
+
+            using (var context = CreateDbContext())
+            {
+                context.Products.AddRange(products);
+
+                context.SaveChanges();
+            }
+
+            // Act
+            using (var context = CreateDbContext())
+            {
+                var productRepository = new ProductRepository(context);
+
+                var result = await productRepository.GetAllProductsAsync(name: _fixture.Create<string>());
+
+                // Assert
+                result.Items.Should().BeEmpty();
+                result.Should().BeOfType<PagedList<Product>>();
             }
         }
 

@@ -21,9 +21,9 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpGet]
-        public  Task<PagedList<Product>> GetAll([FromQuery] QueryParameters qp)
+        public Task<PagedList<Product>> GetAll([FromQuery] QueryParameters qp)
         {
-            return _mediator.Send(new GetAllProductsRequest { Page = qp.Page, PostsPerPage = qp.PostsPerPage });
+            return _mediator.Send(new GetAllProductsRequest { Page = qp.Page, PostsPerPage = qp.PostsPerPage, Name = qp.Name });
         }
 
         [HttpGet("{id}")]
@@ -39,7 +39,7 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public Task<Product> Put(Guid id, [FromBody] Product product)
+        public Task<Product> UpdateProduct(Guid id, [FromBody] Product product)
         {
             if (id != product.Id) throw new ProductIdMismatchException(id.ToString());
 
@@ -47,7 +47,7 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void DeleteProduct(int id)
         {
         }
 

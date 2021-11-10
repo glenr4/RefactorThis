@@ -10,6 +10,7 @@ namespace RefactorThis.Application
     {
         public int Page { get; set; }
         public int PostsPerPage { get; set; }
+        public string Name { get; set; }
 
         public class Handler : IRequestHandler<GetAllProductsRequest, PagedList<Product>>
         {
@@ -22,7 +23,7 @@ namespace RefactorThis.Application
 
             public Task<PagedList<Product>> Handle(GetAllProductsRequest request, CancellationToken cancellationToken)
             {
-                return _productRepository.GetAllProductsAsync(request.Page, request.PostsPerPage);
+                return _productRepository.GetAllProductsAsync(request.Page, request.PostsPerPage, request.Name);
             }
         }
     }

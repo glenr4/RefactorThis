@@ -14,6 +14,6 @@ namespace RefactorThis.Persistence
 
         Task<Product> DeleteProductAsync(Product product);
 
-        Task<PagedList<Product>> GetAllProductsAsync(int page, int pageSize);
+        Task<PagedList<Product>> GetAllProductsAsync(int page = 1, int pageSize = 10, string name = null);
     }
 }
