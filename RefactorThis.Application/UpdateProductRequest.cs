@@ -22,7 +22,7 @@ namespace RefactorThis.Application
 
             public Task<Product> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
             {
-                return _productRepository.UpdateProductAsync(ProductDtoMapper.FromDto(request.Product));
+                return _productRepository.UpdateProductAsync(ProductMapper.FromDto(request.Product));
             }
         }
     }

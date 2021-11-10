@@ -2,7 +2,7 @@
 
 namespace RefactorThis.Application.DTOs
 {
-    public static class ProductDtoMapper
+    public static class ProductMapper
     {
         public static Product FromDto(ProductDto productDto)
         {

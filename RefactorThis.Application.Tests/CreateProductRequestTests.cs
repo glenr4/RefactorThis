@@ -26,7 +26,7 @@ namespace RefactorThis.Application.Tests
         {
             // Arrange
             var productDto = _fixture.Create<ProductDto>();
-            var product = ProductDtoMapper.FromDto(productDto);
+            var product = ProductMapper.FromDto(productDto);
             _productRepository.Setup(p => p.CreateProductAsync(It.IsAny<Product>())).ReturnsAsync(product);
             var request = new CreateProductRequest { Product = productDto };
             var handler = new CreateProductRequest.Handler(_productRepository.Object);

@@ -26,6 +26,13 @@ namespace RefactorThis.Persistence.Sqlite
 
         public async Task<Product> CreateProductAsync(Product product)
         {
+            // The SQlite database has not been confirgured with a Primary Key, so duplicates can be added unless they are
+            // prevented in the code.
+            // TODO: either recreate the tables with the constraint or ensure it is done when upgrading to another database type.
+            var existingProduct = await _context.Products.Where(p => p.Id == product.Id).FirstOrDefaultAsync();
+
+            if (existingProduct != null) throw new DbUpdateException($"Product with Id: {product.Id} already exists");
+
             _context.Products.Add(product);
 
             await _context.SaveChangesAsync();
@@ -55,10 +62,7 @@ namespace RefactorThis.Persistence.Sqlite
 
             await _context.SaveChangesAsync();
 
-            // Return ProductOptions explicitly, otherwise the requester may think that they have been deleted if an empty array is returned
-            var updatedProduct = await _context.Products.Where(p => p.Id == product.Id).Include(p => p.ProductOptions).FirstOrDefaultAsync();
-
-            return updatedProduct;
+            return product;
         }
     }
 }
