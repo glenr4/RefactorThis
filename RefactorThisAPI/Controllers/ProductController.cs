@@ -47,8 +47,9 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void DeleteProduct(int id)
+        public Task DeleteProduct(Guid id)
         {
+            return _mediator.Send(new DeleteProductRequest { Id = id });
         }
 
         [HttpPost("{id}/options")]

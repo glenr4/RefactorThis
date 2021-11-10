@@ -63,9 +63,15 @@ namespace RefactorThis.Persistence.Sqlite
             return product;
         }
 
-        public Task<Product> DeleteProductAsync(Product product)
+        public async Task<Guid> DeleteProductAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var product = new Product(id, "Delete Me", "Delete Me", 0, 0);
+
+            _context.Products.Remove(product);
+
+            await _context.SaveChangesAsync();
+
+            return id;
         }
     }
 }
