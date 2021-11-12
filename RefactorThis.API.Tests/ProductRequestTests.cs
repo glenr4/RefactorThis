@@ -62,7 +62,7 @@ namespace RefactorThis.API.Tests
         {
             // Arrange
             var client = _factory.CreateClient();
-            var product = Utilities.GetSeedingProducts()[0];
+            var product = TestDbSeeding.GetSeedProducts()[0];
             var url = $"/products/{product.Id}";
             var content = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, CONTENT_TYPE);
 
@@ -80,7 +80,7 @@ namespace RefactorThis.API.Tests
         {
             // Arrange
             var client = _factory.CreateClient();
-            var product = Utilities.GetSeedingProducts()[0];
+            var product = TestDbSeeding.GetSeedProducts()[1];
             var url = $"/products/{product.Id}";
 
             // Act

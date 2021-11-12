@@ -40,7 +40,7 @@ namespace RefactorThis.API.Tests
 
                     try
                     {
-                        Utilities.InitializeDbForTests(db);
+                        TestDbSeeding.Init(db);
                     }
                     catch (Exception ex)
                     {

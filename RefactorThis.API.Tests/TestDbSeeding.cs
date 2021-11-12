@@ -5,21 +5,21 @@ using System.Collections.Generic;
 
 namespace RefactorThis.API.Tests
 {
-    public static class Utilities
+    public static class TestDbSeeding
     {
-        public static void InitializeDbForTests(RefactorThisDbContext db)
+        public static void Init(RefactorThisDbContext db)
         {
-            db.Products.AddRange(GetSeedingProducts());
+            db.Products.AddRange(GetSeedProducts());
             db.SaveChanges();
         }
 
         public static void ReinitializeDbForTests(RefactorThisDbContext db)
         {
             db.Products.RemoveRange(db.Products);
-            InitializeDbForTests(db);
+            Init(db);
         }
 
-        public static List<Product> GetSeedingProducts()
+        public static List<Product> GetSeedProducts()
         {
             return new List<Product>()
             {

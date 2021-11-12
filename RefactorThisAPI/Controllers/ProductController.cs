@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RefactorThis.API.Exceptions;
 using RefactorThis.Application;
@@ -21,24 +22,32 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public Task<PagedList<Product>> GetAllProducts([FromQuery] QueryParameters qp)
         {
             return _mediator.Send(new GetAllProductsRequest { Page = qp.Page, PostsPerPage = qp.PostsPerPage, Name = qp.Name });
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public Task<Product> GetProduct(Guid id)
         {
             return _mediator.Send(new GetProductRequest { Id = id });
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public Task<Product> CreateProduct([FromBody] Product product)
         {
             return _mediator.Send(new CreateProductRequest { Product = product });
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public Task<Product> UpdateProduct(Guid id, [FromBody] Product product)
         {
             if (id != product.Id) throw new ProductIdMismatchException(id.ToString());
@@ -47,6 +56,8 @@ namespace RefactorThis.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public Task DeleteProduct(Guid id)
         {
             return _mediator.Send(new DeleteProductRequest { Id = id });

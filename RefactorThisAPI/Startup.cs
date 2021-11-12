@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RefactorThis.API;
 using RefactorThis.API.Logging;
 using RefactorThis.Application;
 using RefactorThis.Persistence;
@@ -46,7 +47,10 @@ namespace RefactorThisAPI
                 options.UseSqlite("Data Source=../App_Data/products.db;");
                 options.UseLoggerFactory(_sqlLoggerFactory);
             });
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<UnhandledExceptionFilter>();
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RefactorThisAPI", Version = "v1" });
