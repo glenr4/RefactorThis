@@ -23,9 +23,9 @@ namespace RefactorThis.API.Tests
         {
             return new List<Product>()
             {
-                new Product(Guid.NewGuid(),"Product1", "Description", 1,1),
-                new Product(Guid.NewGuid(),"Product2", "Description", 2,2),
-                new Product(Guid.NewGuid(),"Product3", "Description", 3,3),
+                new Product(new Guid("4E2BC5F2-699A-4C42-802E-CE4B4D2AC000"),"Product1", "Description", 1,1),
+                new Product(new Guid("4E2BC5F2-699A-4C42-802E-CE4B4D2AC001"),"Product2", "Description", 2,2),
+                new Product(new Guid("4E2BC5F2-699A-4C42-802E-CE4B4D2AC002"),"Product3", "Description", 3,3),
             };
         }
     }
