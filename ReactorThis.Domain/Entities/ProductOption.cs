@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RefactorThis.Domain.Exceptions;
+using System;
 
 namespace RefactorThis.Domain.Entities
 {
@@ -13,9 +14,15 @@ namespace RefactorThis.Domain.Entities
         public ProductOption(Guid id, Guid productId, string name, string description)
         {
             Id = id != Guid.Empty ? id : Guid.NewGuid();
-            ProductId = productId != Guid.Empty ? productId : throw new ArgumentException(nameof(ProductId));
-            Name = !string.IsNullOrWhiteSpace(name) ? name : throw new ArgumentException(nameof(name));
-            Description = !string.IsNullOrWhiteSpace(description) ? description : throw new ArgumentException(nameof(description));
+            ProductId = productId != Guid.Empty
+                ? productId
+                : throw new EmptyArgumentException(string.Format(EmptyArgumentException.MessageTemplate, nameof(ProductId)));
+            Name = !string.IsNullOrWhiteSpace(name)
+                ? name
+                : throw new EmptyArgumentException(string.Format(EmptyArgumentException.MessageTemplate, nameof(name)));
+            Description = !string.IsNullOrWhiteSpace(description)
+                ? description
+                : throw new EmptyArgumentException(string.Format(EmptyArgumentException.MessageTemplate, nameof(description)));
         }
 
         public Guid Id { get; private set; }

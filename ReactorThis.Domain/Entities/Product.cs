@@ -14,10 +14,18 @@ namespace RefactorThis.Domain.Entities
         public Product(Guid id, string name, string description, decimal price, decimal deliveryPrice)
         {
             Id = id != Guid.Empty ? id : Guid.NewGuid();
-            Name = !string.IsNullOrWhiteSpace(name) ? name : throw new ArgumentException(nameof(name));
-            Description = !string.IsNullOrWhiteSpace(description) ? description : throw new ArgumentException(nameof(description));
-            Price = price >= 0 ? price : throw new NegativeNumberInvalidException(string.Format(NegativeNumberInvalidException.MessageTemplate, nameof(Price)));
-            DeliveryPrice = deliveryPrice >= 0 ? deliveryPrice : throw new NegativeNumberInvalidException(string.Format(NegativeNumberInvalidException.MessageTemplate, nameof(DeliveryPrice)));
+            Name = !string.IsNullOrWhiteSpace(name)
+                ? name
+                : throw new EmptyArgumentException(string.Format(EmptyArgumentException.MessageTemplate, nameof(name)));
+            Description = !string.IsNullOrWhiteSpace(description)
+                ? description
+                : throw new EmptyArgumentException(string.Format(EmptyArgumentException.MessageTemplate, nameof(description)));
+            Price = price >= 0
+                ? price
+                : throw new NegativeNumberInvalidException(string.Format(NegativeNumberInvalidException.MessageTemplate, nameof(Price)));
+            DeliveryPrice = deliveryPrice >= 0
+                ? deliveryPrice
+                : throw new NegativeNumberInvalidException(string.Format(NegativeNumberInvalidException.MessageTemplate, nameof(DeliveryPrice)));
         }
 
         public Guid Id { get; private set; }
