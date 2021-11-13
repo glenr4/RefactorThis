@@ -222,28 +222,55 @@ for (i = 0, l = charts.length; i < l; i++) {
 
 var assemblies = [
   {
+    "name": "RefactorThis.API",
+    "classes": [
+      { "name": "RefactorThis.API.Controllers.ProductController", "rp": "RefactorThis.API_ProductController.html", "cl": 38, "ucl": 0, "cal": 38, "tl": 111, "ct": "LineCoverage", "mc": "-", "cb": 8, "tb": 8, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.API.Exceptions.ProductIdMismatchException", "rp": "RefactorThis.API_ProductIdMismatchException.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 16, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.API.Exceptions.ProductOptionIdMismatchException", "rp": "RefactorThis.API_ProductOptionIdMismatchException.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 16, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.API.Logging.ActivityEnricher", "rp": "RefactorThis.API_ActivityEnricher.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 53, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.API.Logging.ActivityExtensions", "rp": "RefactorThis.API_ActivityExtensions.html", "cl": 0, "ucl": 24, "cal": 24, "tl": 53, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 18, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.API.Logging.RequestLogger", "rp": "RefactorThis.API_RequestLogger.html", "cl": 21, "ucl": 5, "cal": 26, "tl": 53, "ct": "LineCoverage", "mc": "-", "cb": 4, "tb": 6, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.API.QueryParameters", "rp": "RefactorThis.API_QueryParameters.html", "cl": 6, "ucl": 4, "cal": 10, "tl": 26, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 2, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.API.SecurityHeadersDefinitions", "rp": "RefactorThis.API_SecurityHeadersDefinitions.html", "cl": 57, "ucl": 16, "cal": 73, "tl": 90, "ct": "LineCoverage", "mc": "-", "cb": 1, "tb": 2, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.API.UnhandledExceptionFilter", "rp": "RefactorThis.API_UnhandledExceptionFilter.html", "cl": 28, "ucl": 3, "cal": 31, "tl": 66, "ct": "LineCoverage", "mc": "-", "cb": 11, "tb": 12, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThisAPI.Program", "rp": "RefactorThis.API_Program.html", "cl": 5, "ucl": 17, "cal": 22, "tl": 38, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThisAPI.Startup", "rp": "RefactorThis.API_Startup.html", "cl": 46, "ucl": 6, "cal": 52, "tl": 95, "ct": "LineCoverage", "mc": "-", "cb": 4, "tb": 6, "lch": [], "bch": [], "hc": [] },
+    ]},
+  {
     "name": "RefactorThis.Application",
     "classes": [
       { "name": "RefactorThis.Application.CreateProductOptionRequest", "rp": "RefactorThis.Application_CreateProductOptionRequest.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 28, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "RefactorThis.Application.CreateProductRequest", "rp": "RefactorThis.Application_CreateProductRequest.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 28, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Application.DeleteProductOptionRequest", "rp": "RefactorThis.Application_DeleteProductOptionRequest.html", "cl": 9, "ucl": 2, "cal": 11, "tl": 29, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Application.DeleteProductRequest", "rp": "RefactorThis.Application_DeleteProductRequest.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 28, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Application.GetAllProductOptionsRequest", "rp": "RefactorThis.Application_GetAllProductOptionsRequest.html", "cl": 10, "ucl": 5, "cal": 15, "tl": 31, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Application.GetAllProductsRequest", "rp": "RefactorThis.Application_GetAllProductsRequest.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 30, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Application.GetProductOptionRequest", "rp": "RefactorThis.Application_GetProductOptionRequest.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 30, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "RefactorThis.Application.GetProductRequest", "rp": "RefactorThis.Application_GetProductRequest.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 29, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Application.UpdateProductOptionRequest", "rp": "RefactorThis.Application_UpdateProductOptionRequest.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 28, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "RefactorThis.Application.UpdateProductRequest", "rp": "RefactorThis.Application_UpdateProductRequest.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 28, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
     ]},
   {
     "name": "RefactorThis.Domain",
     "classes": [
-      { "name": "RefactorThis.Domain.Entities.Product", "rp": "RefactorThis.Domain_Product.html", "cl": 16, "ucl": 0, "cal": 16, "tl": 33, "ct": "LineCoverage", "mc": "-", "cb": 10, "tb": 10, "lch": [], "bch": [], "hc": [] },
-      { "name": "RefactorThis.Domain.Entities.ProductOption", "rp": "RefactorThis.Domain_ProductOption.html", "cl": 11, "ucl": 3, "cal": 14, "tl": 29, "ct": "LineCoverage", "mc": "-", "cb": 7, "tb": 8, "lch": [], "bch": [], "hc": [] },
-      { "name": "RefactorThis.Domain.Exceptions.NegativeNumberInvalidException", "rp": "RefactorThis.Domain_NegativeNumberInvalidException.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 11, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
-      { "name": "RefactorThis.Domain.Exceptions.ProductNotFoundException", "rp": "RefactorThis.Domain_ProductNotFoundException.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 11, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
-      { "name": "RefactorThis.Domain.Exceptions.ProductOptionNotFoundException", "rp": "RefactorThis.Domain_ProductOptionNotFoundException.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 11, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Domain.Entities.Product", "rp": "RefactorThis.Domain_Product.html", "cl": 24, "ucl": 0, "cal": 24, "tl": 41, "ct": "LineCoverage", "mc": "-", "cb": 14, "tb": 14, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Domain.Entities.ProductOption", "rp": "RefactorThis.Domain_ProductOption.html", "cl": 23, "ucl": 0, "cal": 23, "tl": 36, "ct": "LineCoverage", "mc": "-", "cb": 11, "tb": 12, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Domain.Exceptions.EmptyArgumentException", "rp": "RefactorThis.Domain_EmptyArgumentException.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 16, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Domain.Exceptions.NegativeNumberInvalidException", "rp": "RefactorThis.Domain_NegativeNumberInvalidException.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 16, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Domain.Exceptions.ProductNotFoundException", "rp": "RefactorThis.Domain_ProductNotFoundException.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 16, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Domain.Exceptions.ProductOptionNotFoundException", "rp": "RefactorThis.Domain_ProductOptionNotFoundException.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 16, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+    ]},
+  {
+    "name": "RefactorThis.Persistence",
+    "classes": [
+      { "name": "RefactorThis.Persistence.PagedList<T>", "rp": "RefactorThis.Persistence_PagedList_1.html", "cl": 18, "ucl": 0, "cal": 18, "tl": 35, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
     ]},
   {
     "name": "RefactorThis.Persistence.Sqlite",
     "classes": [
-      { "name": "RefactorThis.Persistence.Sqlite.ProductOptionRepository", "rp": "RefactorThis.Persistence.Sqlite_ProductOptionRepository.html", "cl": 11, "ucl": 6, "cal": 17, "tl": 50, "ct": "LineCoverage", "mc": "-", "cb": 2, "tb": 2, "lch": [], "bch": [], "hc": [] },
-      { "name": "RefactorThis.Persistence.Sqlite.ProductRepository", "rp": "RefactorThis.Persistence.Sqlite_ProductRepository.html", "cl": 20, "ucl": 2, "cal": 22, "tl": 57, "ct": "LineCoverage", "mc": "-", "cb": 4, "tb": 4, "lch": [], "bch": [], "hc": [] },
-      { "name": "RefactorThis.Persistence.Sqlite.RefactorThisDbContext", "rp": "RefactorThis.Persistence.Sqlite_RefactorThisDbContext.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 15, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Persistence.Sqlite.ProductOptionRepository", "rp": "RefactorThis.Persistence.Sqlite_ProductOptionRepository.html", "cl": 35, "ucl": 5, "cal": 40, "tl": 76, "ct": "LineCoverage", "mc": "-", "cb": 8, "tb": 8, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Persistence.Sqlite.ProductRepository", "rp": "RefactorThis.Persistence.Sqlite_ProductRepository.html", "cl": 45, "ucl": 1, "cal": 46, "tl": 77, "ct": "LineCoverage", "mc": "-", "cb": 10, "tb": 10, "lch": [], "bch": [], "hc": [] },
+      { "name": "RefactorThis.Persistence.Sqlite.RefactorThisDbContext", "rp": "RefactorThis.Persistence.Sqlite_RefactorThisDbContext.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 26, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
     ]},
 ];
 
