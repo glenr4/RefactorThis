@@ -21,18 +21,21 @@ namespace RefactorThisAPI
     {
         private ILoggerFactory _sqlLoggerFactory;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
 
-            _sqlLoggerFactory = LoggerFactory.Create(builder =>
+            if (env.IsDevelopment())
             {
-                builder.AddFilter((category, level) =>
-                            category == DbLoggerCategory.Database.Command.Name
-                            && level == LogLevel.Information)
-                        .AddConsole()   // when running from command prompt
-                        .AddDebug();    // when debugging from VS
-            });
+                _sqlLoggerFactory = LoggerFactory.Create(builder =>
+                {
+                    builder.AddFilter((category, level) =>
+                                category == DbLoggerCategory.Database.Command.Name
+                                && level == LogLevel.Information)
+                            .AddConsole()   // when running from command prompt
+                            .AddDebug();    // when debugging from VS
+                });
+            }
         }
 
         public IConfiguration Configuration { get; }
@@ -47,10 +50,12 @@ namespace RefactorThisAPI
                 options.UseSqlite("Data Source=../App_Data/products.db;");
                 options.UseLoggerFactory(_sqlLoggerFactory);
             });
+
             services.AddControllers(options =>
             {
                 options.Filters.Add<UnhandledExceptionFilter>();
             });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RefactorThisAPI", Version = "v1" });
@@ -64,6 +69,8 @@ namespace RefactorThisAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSecurityHeaders(SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment()));
+
             app.UseMiddleware<RequestLogger>();
 
             if (env.IsDevelopment())
