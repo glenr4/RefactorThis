@@ -27,7 +27,7 @@ namespace RefactorThis.Persistence.Sqlite
         {
             var result = await _context.ProductOptions.Where(p => p.ProductId == productId && p.Id == productOptionId).FirstOrDefaultAsync();
 
-            return result ?? throw new ProductOptionNotFoundException($"Product Option with Id: {productOptionId} and Product Id: { productId} does not exist");
+            return result ?? throw new ProductOptionNotFoundException(string.Format(ProductOptionNotFoundException.MessageTemplate, productOptionId, productId));
         }
 
         public async Task<ProductOption> CreateProductOptionAsync(ProductOption productOption)

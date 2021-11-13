@@ -35,7 +35,7 @@ namespace RefactorThis.Persistence.Sqlite
         {
             var result = await _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
 
-            return result ?? throw new ProductNotFoundException(id.ToString());
+            return result ?? throw new ProductNotFoundException(string.Format(ProductNotFoundException.MessageTemplate, id.ToString()));
         }
 
         public async Task<Product> CreateProductAsync(Product product)
