@@ -16,18 +16,18 @@ namespace RefactorThis.Persistence.Sqlite
             this._context = context;
         }
 
-        public Task<PagedList<ProductOption>> GetAllProductOptionsAsync(int page = 1, int pageSize = 10)
+        public Task<PagedList<ProductOption>> GetAllProductOptionsAsync(Guid productId, int page = 1, int pageSize = 10)
         {
-            var query = _context.QueryAll<ProductOption>().OrderBy(p => p.Name);
+            var query = _context.QueryAll<ProductOption>().Where(po => po.ProductId == productId).OrderBy(p => p.Name);
 
             return PagedList<ProductOption>.ToPagedListAsync(query, page, pageSize);
         }
 
-        public async Task<ProductOption> GetProductOptionAsync(Guid id)
+        public async Task<ProductOption> GetProductOptionAsync(Guid productId, Guid productOptionId)
         {
-            var result = await _context.ProductOptions.Where(p => p.Id == id).FirstOrDefaultAsync();
+            var result = await _context.ProductOptions.Where(p => p.ProductId == productId && p.Id == productOptionId).FirstOrDefaultAsync();
 
-            return result ?? throw new ProductOptionNotFoundException(id.ToString());
+            return result ?? throw new ProductOptionNotFoundException($"Product Option with Id: {productOptionId} and Product Id: { productId} does not exist");
         }
 
         public async Task<ProductOption> CreateProductOptionAsync(ProductOption productOption)
@@ -44,7 +44,7 @@ namespace RefactorThis.Persistence.Sqlite
             // TODO: either recreate the tables with the constraint or ensure it is done when upgrading to another database type.
             var existingProductOption = await _context.ProductOptions.Where(p => p.Id == productOption.Id).FirstOrDefaultAsync();
 
-            if (existingProductOption != null) throw new DbUpdateException($"ProductOption with Id: {existingProductOption.Id} already exists");
+            if (existingProductOption != null) throw new DbUpdateException($"Product Option with Id: {existingProductOption.Id} already exists");
 
             _context.ProductOptions.Add(productOption);
 
@@ -62,15 +62,15 @@ namespace RefactorThis.Persistence.Sqlite
             return ProductOption;
         }
 
-        public async Task<Guid> DeleteProductOptionAsync(Guid id)
+        public async Task<Guid> DeleteProductOptionAsync(Guid productId, Guid productOptionId)
         {
-            var ProductOption = new ProductOption(id, Guid.NewGuid(), "Delete Me", "Delete Me");
+            var ProductOption = new ProductOption(productOptionId, productId, "Delete Me", "Delete Me");
 
             _context.ProductOptions.Remove(ProductOption);
 
             await _context.SaveChangesAsync();
 
-            return id;
+            return productOptionId;
         }
     }
 }

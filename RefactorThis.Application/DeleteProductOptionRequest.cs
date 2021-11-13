@@ -8,7 +8,8 @@ namespace RefactorThis.Application
 {
     public class DeleteProductOptionRequest : IRequest<Guid>
     {
-        public Guid Id { get; set; }
+        public Guid ProductId { get; set; }
+        public Guid ProductOptionId { get; set; }
 
         public class Handler : IRequestHandler<DeleteProductOptionRequest, Guid>
         {
@@ -21,7 +22,7 @@ namespace RefactorThis.Application
 
             public Task<Guid> Handle(DeleteProductOptionRequest request, CancellationToken cancellationToken)
             {
-                return _productOptionRepository.DeleteProductOptionAsync(request.Id);
+                return _productOptionRepository.DeleteProductOptionAsync(request.ProductId, request.ProductOptionId);
             }
         }
     }

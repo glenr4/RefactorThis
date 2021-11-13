@@ -27,12 +27,13 @@ namespace RefactorThis.API
 
             switch (exceptionType)
             {
-                // Custom exceptions with messages
                 case nameof(ProductNotFoundException):
+                case nameof(ProductOptionNotFoundException):
                     statusCode = (int)HttpStatusCode.NotFound;
                     break;
 
                 case nameof(ProductIdMismatchException):
+                case nameof(ProductOptionIdMismatchException):
                     statusCode = (int)HttpStatusCode.BadRequest;
                     break;
 
@@ -40,7 +41,6 @@ namespace RefactorThis.API
                     statusCode = (int)HttpStatusCode.BadRequest;
                     break;
 
-                // System exceptions
                 case nameof(DbUpdateConcurrencyException):
                     statusCode = (int)HttpStatusCode.NotFound;
                     message = "Item not found";

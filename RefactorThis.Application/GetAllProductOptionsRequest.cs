@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using RefactorThis.Domain.Entities;
 using RefactorThis.Persistence;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace RefactorThis.Application
 {
     public class GetAllProductOptionsRequest : IRequest<PagedList<ProductOption>>
     {
+        public Guid ProductId { get; set; }
         public int Page { get; set; }
         public int PostsPerPage { get; set; }
 
@@ -22,7 +24,7 @@ namespace RefactorThis.Application
 
             public Task<PagedList<ProductOption>> Handle(GetAllProductOptionsRequest request, CancellationToken cancellationToken)
             {
-                return _productOptionRepository.GetAllProductOptionsAsync(request.Page, request.PostsPerPage);
+                return _productOptionRepository.GetAllProductOptionsAsync(request.ProductId, request.Page, request.PostsPerPage);
             }
         }
     }

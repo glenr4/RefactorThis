@@ -6,14 +6,14 @@ namespace RefactorThis.Persistence
 {
     public interface IProductOptionRepository
     {
-        Task<ProductOption> GetProductOptionAsync(Guid id);
+        Task<ProductOption> GetProductOptionAsync(Guid productId, Guid productOptionId);
 
         Task<ProductOption> CreateProductOptionAsync(ProductOption productOption);
 
         Task<ProductOption> UpdateProductOptionAsync(ProductOption productOption);
 
-        Task<Guid> DeleteProductOptionAsync(Guid id);
+        Task<PagedList<ProductOption>> GetAllProductOptionsAsync(Guid productId, int page = 1, int pageSize = 10);
 
-        Task<PagedList<ProductOption>> GetAllProductOptionsAsync(int page = 1, int pageSize = 10);
+        Task<Guid> DeleteProductOptionAsync(Guid productId, Guid productOptionId);
     }
 }

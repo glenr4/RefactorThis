@@ -7,9 +7,13 @@ namespace RefactorThis.API.Tests
 {
     public static class TestDbSeeding
     {
+        private static IList<Guid> _productIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+        private static IList<Guid> _productOptionIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+
         public static void Init(RefactorThisDbContext db)
         {
             db.Products.AddRange(GetSeedProducts());
+            db.ProductOptions.AddRange(GetSeedProductOptions());
             db.SaveChanges();
         }
 
@@ -23,9 +27,19 @@ namespace RefactorThis.API.Tests
         {
             return new List<Product>()
             {
-                new Product(new Guid("4E2BC5F2-699A-4C42-802E-CE4B4D2AC000"),"Product1", "Description", 1,1),
-                new Product(new Guid("4E2BC5F2-699A-4C42-802E-CE4B4D2AC001"),"Product2", "Description", 2,2),
-                new Product(new Guid("4E2BC5F2-699A-4C42-802E-CE4B4D2AC002"),"Product3", "Description", 3,3),
+                new Product(_productIds[0],"Product1", "Description", 1,1),
+                new Product(_productIds[1],"Product2", "Description", 2,2),
+                new Product(_productIds[2],"Product3", "Description", 3,3),
+            };
+        }
+
+        public static List<ProductOption> GetSeedProductOptions()
+        {
+            return new List<ProductOption>()
+            {
+                new ProductOption(_productOptionIds[0],_productIds[0],"ProductOption1", "Description"),
+                new ProductOption(_productOptionIds[1],_productIds[1],"ProductOption2", "Description"),
+                new ProductOption(_productOptionIds[2],_productIds[2],"ProductOption3", "Description"),
             };
         }
     }
