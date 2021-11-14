@@ -3,15 +3,17 @@
 
   -> Upgraded to latest stable version which is .Net v5.0 at the time of writing
 
-- Uses SQlite as the database, this is not a production ready database and  needs to be upgraded to a relational database like SQL Server or Postgres
+- Uses SQlite as the database, this is not a production ready database and  needs to be upgraded to another relational database like SQL Server or Postgres
 
   -> Upgrading the database is beyond the scope of this coding exercise
   
-  -> The database schema has not defined primary keys and a one to many relationship between Products and ProductOptions, this would need to be added to the database design when upgrading the database
+  -> The database schema does not have primary keys or a one to many relationship between Products and ProductOptions, this would need to be added to the database design when upgrading the database
 
 - The application is a Web API but includes a Razor package and useMvc() in the configuration, this is only required for serving HTML pages
 
 - Everything is in a sinlge project, which does not allow for any code re-use 
+
+- Mixes data access inside the Domain objects
 
 - No tests
 
@@ -40,7 +42,7 @@
 
 
 # My Approach
-- Due to the issues listed above, I thought it would be easier to start from a new project
+- Due to the issues listed above, I started from scratch with a new solution
 
 - I have followed the [Clean Architecture](https://www.ssw.com.au/rules/rules-to-better-clean-architecture) model in that the Domain sits at the centre of the application structure and is wrapped by the Application code and then everything else interfaces with the application. This gives good
 separation of concerns.
@@ -50,6 +52,10 @@ separation of concerns.
 - I have used the Repository Pattern with Entity Framework Core to remove the dependency between other application layers, such as the API, from any particular library. This will allow for any other persistent storage to be used with minimal changes to the rest of the application.
 
   -> This also allows the application to change to CQRS in the future without major changes
+
+- I have also used the Mediator pattern with the API, so the controller methods do not have a dependency on anything other than the Mediatr library. 
+
+  -> This allows the application to be re-used with another type of API, without affecting the Web API project.
 
 - The SQlite database does not have any referential integrity setup inside of it (but it should have) and so the relationship
 between many ProductOptions to one Product has been checked for in the repository logic. Also uniqueness, which a Primary Key
@@ -67,7 +73,13 @@ would normally give.
 
   -> Swagger requires the Content Security Policy (CSP) to be opened up to allow inline scripts, which opens the API up to Cross Site Scripting (XSS) attacks
 
+## Authentication/Authorisation
+- Added authentication using OAuth v2 from Azure Active Directory
+- Enabled in Production, to get an access token use: 
 
+  `curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'client_id=a5b8d992-bf9f-4bc7-9a54-c68a54db1949&scope=api%3A%2F%2F3e7d25c4-8f0b-41dd-9885-9410984b4991/.default&client_secret=1aV7Q~V9TDe4KXc~KpbWqxy0bpae6DmtB2jdw&grant_type=client_credentials' 'https://login.microsoftonline.com/dee93494-4996-4929-ac33-83043d5f677a/oauth2/v2.0/token'`
+
+  Then when sending a request use it as a bearer token in the authorization header.
 
 # Recommendations Before Production Deployment
 1. Add user authentication and authorisation

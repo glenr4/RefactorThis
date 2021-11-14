@@ -1,4 +1,6 @@
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using RefactorThis.API;
 using RefactorThis.API.Logging;
@@ -45,6 +48,16 @@ namespace RefactorThisAPI
         {
             services.AddSingleton(Log.Logger);
 
+            // https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-aspnet-core-web-api
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddMicrosoftIdentityWebApi(Configuration, "AzureAd");
+
+            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                // The claim in the Jwt token where App roles are available.
+                options.TokenValidationParameters.RoleClaimType = "roles";
+            });
+
             services.AddDbContext<RefactorThisDbContext>(options =>
             {
                 options.UseSqlite("Data Source=../App_Data/products.db;");
@@ -77,13 +90,18 @@ namespace RefactorThisAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RefactorThisAPI v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "RefactorThisAPI v1");
+                }
+                );
             }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
