@@ -12,15 +12,12 @@ namespace RefactorThis.API.Tests
 
         public static void Init(RefactorThisDbContext db)
         {
+            db.Products.RemoveRange(db.Products);
+            db.ProductOptions.RemoveRange(db.ProductOptions);
+
             db.Products.AddRange(GetSeedProducts());
             db.ProductOptions.AddRange(GetSeedProductOptions());
             db.SaveChanges();
-        }
-
-        public static void ReinitializeDbForTests(RefactorThisDbContext db)
-        {
-            db.Products.RemoveRange(db.Products);
-            Init(db);
         }
 
         public static List<Product> GetSeedProducts()

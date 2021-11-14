@@ -43,26 +43,13 @@ namespace RefactorThisAPI
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Log.Logger);
 
-            // https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-aspnet-core-web-api
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-               .AddMicrosoftIdentityWebApi(Configuration, "AzureAd");
+            ConfigureAuth(services);
 
-            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
-            {
-                // The claim in the Jwt token where App roles are available.
-                options.TokenValidationParameters.RoleClaimType = "roles";
-            });
-
-            services.AddDbContext<RefactorThisDbContext>(options =>
-            {
-                options.UseSqlite("Data Source=../App_Data/products.db;");
-                options.UseLoggerFactory(_sqlLoggerFactory);
-            });
+            ConfigureDb(services);
 
             services.AddControllers(options =>
             {
@@ -103,7 +90,6 @@ namespace RefactorThisAPI
             services.TryAddScoped<IProductOptionRepository, ProductOptionRepository>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSecurityHeaders(SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment()));
@@ -131,6 +117,28 @@ namespace RefactorThisAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+        }
+
+        public virtual void ConfigureAuth(IServiceCollection services)
+        {
+            // https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-v2-aspnet-core-web-api
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddMicrosoftIdentityWebApi(Configuration, "AzureAd");
+
+            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                // The claim in the Jwt token where App roles are available.
+                options.TokenValidationParameters.RoleClaimType = "roles";
+            });
+        }
+
+        public virtual void ConfigureDb(IServiceCollection services)
+        {
+            services.AddDbContext<RefactorThisDbContext>(options =>
+            {
+                options.UseSqlite("Data Source=../App_Data/products.db;");
+                options.UseLoggerFactory(_sqlLoggerFactory);
             });
         }
     }

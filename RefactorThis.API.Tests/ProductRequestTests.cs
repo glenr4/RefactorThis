@@ -1,9 +1,14 @@
 ﻿using AutoFixture;
 using FluentAssertions;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RefactorThis.Domain.Entities;
-using RefactorThisAPI;
+using RefactorThis.Persistence.Sqlite;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -13,15 +18,14 @@ using Xunit;
 namespace RefactorThis.API.Tests
 {
     public class ProductRequestTests
-    : IClassFixture<TestWebApiFactory<Startup>>
     {
-        private readonly TestWebApiFactory<Startup> _factory;
         private readonly Fixture _fixture;
+
+        private TestServer _factory;
         private const string CONTENT_TYPE = "application/json";
 
-        public ProductRequestTests(TestWebApiFactory<Startup> factory)
+        public ProductRequestTests()
         {
-            _factory = factory;
             _fixture = new Fixture();
         }
 
@@ -31,7 +35,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenGetProduct_ThenEndpointsReturnSuccessAndCorrectContentType(string url, int expectedResultCount)
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
 
             // Act
             var response = await client.GetAsync(url);
@@ -47,7 +51,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenGetProductById_ThenEndpointsReturnSuccessAndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var id = TestDbSeeding.GetSeedProducts()[0].Id;
             var url = $"/products/{id}";
 
@@ -65,7 +69,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenPostProduct_ThenEndpointReturnSuccessAndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var product = _fixture.Create<Product>();
             var url = "/products";
             var content = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, CONTENT_TYPE);
@@ -84,7 +88,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenPutProduct_ThenEndpointReturnSuccessAndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var product = TestDbSeeding.GetSeedProducts()[0];
             var url = $"/products/{product.Id}";
             var content = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, CONTENT_TYPE);
@@ -103,7 +107,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenDeleteProduct_ThenEndpointReturnSuccess()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var product = TestDbSeeding.GetSeedProducts()[1];
             var url = $"/products/{product.Id}";
 
@@ -119,7 +123,7 @@ namespace RefactorThis.API.Tests
 
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var existingProduct = TestDbSeeding.GetSeedProducts()[0];
             var product = new Product(existingProduct.Id, _fixture.Create<string>(), _fixture.Create<string>(), _fixture.Create<int>(), _fixture.Create<int>());
             var url = "/products";
@@ -137,7 +141,7 @@ namespace RefactorThis.API.Tests
         public async Task GivenProductIdDoesNotMatch_WhenPutProduct_ThenReturnStatus400AndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var product = _fixture.Create<Product>();
             var url = $"/products/{Guid.NewGuid()}";
             var content = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, CONTENT_TYPE);
@@ -154,7 +158,7 @@ namespace RefactorThis.API.Tests
         public async Task GivenProductDoesNotExist_WhenPutProduct_ThenReturnStatus404AndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var product = _fixture.Create<Product>();
             var url = $"/products/{product.Id}";
             var content = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, CONTENT_TYPE);
@@ -171,7 +175,7 @@ namespace RefactorThis.API.Tests
         public async Task GivenProductDoesNotExist_WhenDeleteProduct_ThenReturnStatus404AndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var product = _fixture.Create<Product>();
             var url = $"/products/{product.Id}";
 
@@ -189,7 +193,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenGetProductOption_ThenEndpointsReturnSuccessAndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var productId = TestDbSeeding.GetSeedProductOptions()[0].ProductId;
             var url = $"/products/{productId}/options";
             var expectedResultCount = 1;
@@ -209,7 +213,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenGetProductOptionById_ThenEndpointsReturnSuccessAndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var productId = TestDbSeeding.GetSeedProductOptions()[0].ProductId;
             var productOptionId = TestDbSeeding.GetSeedProductOptions()[0].Id;
 
@@ -230,7 +234,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenGetProductOptionByIdDoesNotHaveCorrectProductId_ThenReturnStatus404AndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var productId = Guid.NewGuid();
             var productOptionId = Guid.NewGuid();
 
@@ -248,7 +252,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenPostProductOption_ThenEndpointReturnSuccessAndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var productId = TestDbSeeding.GetSeedProducts()[0].Id;
             var productOption = new ProductOption(Guid.NewGuid(), productId, _fixture.Create<string>(), _fixture.Create<string>());
             var url = $"/products/{productId}/options";
@@ -268,7 +272,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenPostProductOptionButProductDoesNotExist_ThenReturnStatus400AndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var productId = TestDbSeeding.GetSeedProducts()[0].Id;
             var productOption = new ProductOption(Guid.NewGuid(), Guid.NewGuid(), _fixture.Create<string>(), _fixture.Create<string>());
             var url = $"/products/{productId}/options";
@@ -286,7 +290,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenPutProductOption_ThenEndpointReturnSuccessAndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var productOption = TestDbSeeding.GetSeedProductOptions()[0];
             var url = $"/products/{productOption.ProductId}/options/{productOption.Id}";
             var content = new StringContent(JsonConvert.SerializeObject(productOption), Encoding.UTF8, CONTENT_TYPE);
@@ -305,7 +309,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenPutProductOptionButProductIdMismatch_ThenReturnStatus400AndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var productId = Guid.NewGuid();
             var productOption = TestDbSeeding.GetSeedProductOptions()[0];
             var url = $"/products/{productId}/options/{productOption.Id}";
@@ -323,7 +327,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenPutProductOptionButProductOptionIdMismatch_ThenReturnStatus400AndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var productOptionId = Guid.NewGuid();
             var productOption = TestDbSeeding.GetSeedProductOptions()[0];
             var url = $"/products/{productOption.ProductId}/options/{productOptionId}";
@@ -341,7 +345,7 @@ namespace RefactorThis.API.Tests
         public async Task WhenDeleteProductOption_ThenEndpointReturnSuccess()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var productOptions = TestDbSeeding.GetSeedProductOptions()[1];
             var url = $"/products/{productOptions.ProductId}/options/{productOptions.Id}";
 
@@ -356,7 +360,7 @@ namespace RefactorThis.API.Tests
         public async Task GivenProductOptionDoesNotExist_WhenDeleteProductOption_ThenReturnStatus404AndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = CreateClient();
             var productOption = _fixture.Create<ProductOption>();
             var url = $"/products/{productOption.ProductId}/options/{productOption.ProductId}";
 
@@ -373,6 +377,39 @@ namespace RefactorThis.API.Tests
             var stringContext = await content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<T>(stringContext);
+        }
+
+        private HttpClient CreateClient()
+        {
+            var builder = new WebHostBuilder().UseStartup<TestStartup>().ConfigureServices(services =>
+            {
+                var descriptor = services.SingleOrDefault(
+                        d => d.ServiceType ==
+                            typeof(DbContextOptions<RefactorThisDbContext>));
+
+                services.Remove(descriptor);
+
+                services.AddDbContext<RefactorThisDbContext>(options =>
+                {
+                    options.UseInMemoryDatabase("InMemoryDbForTesting");
+                });
+
+                var sp = services.BuildServiceProvider();
+
+                using (var scope = sp.CreateScope())
+                {
+                    var scopedServices = scope.ServiceProvider;
+                    var db = scopedServices.GetRequiredService<RefactorThisDbContext>();
+
+                    db.Database.EnsureCreated();
+
+                    TestDbSeeding.Init(db);
+                }
+            });
+
+            var factory = new TestServer(builder);
+
+            return factory.CreateClient();
         }
     }
 }
