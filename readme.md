@@ -61,6 +61,8 @@ would normally give.
 
 - I added paged results for the GET all products/product options endpoints as they could potentially return a large amount of results, which would adversely affect the performance of the system
 
+- I have documented the API using Swagger
+
 ## Security
 - Don't display detailed debug information in Production as this gives insight into the system that a hacker may be able to exploit
 
