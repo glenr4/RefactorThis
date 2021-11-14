@@ -44,12 +44,13 @@ namespace RefactorThis.API
                     builder.AddUsb().None();
                 });
 
-            AddCspHstsDefinitions(isDev, policy);
+            AddCspDefinitions(isDev, policy);
+            AddHstsDefinitions(isDev, policy);
 
             return policy;
         }
 
-        private static void AddCspHstsDefinitions(bool isDev, HeaderPolicyCollection policy)
+        private static void AddCspDefinitions(bool isDev, HeaderPolicyCollection policy)
         {
             if (!isDev)
             {
@@ -66,8 +67,6 @@ namespace RefactorThis.API
                     builder.AddFrameAncestors().None();
                     builder.AddCustomDirective("require-trusted-types-for", "'script'");
                 });
-                // maxage = one year in seconds
-                policy.AddStrictTransportSecurityMaxAgeIncludeSubDomains(maxAgeInSeconds: 60 * 60 * 24 * 365);
             }
             else
             {
@@ -84,6 +83,15 @@ namespace RefactorThis.API
                     builder.AddBaseUri().Self();
                     builder.AddFrameAncestors().None();
                 });
+            }
+        }
+
+        private static void AddHstsDefinitions(bool isDev, HeaderPolicyCollection policy)
+        {
+            if (!isDev)
+            {
+                // maxage = one year in seconds
+                policy.AddStrictTransportSecurityMaxAgeIncludeSubDomains(maxAgeInSeconds: 60 * 60 * 24 * 365);
             }
         }
     }

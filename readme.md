@@ -37,10 +37,6 @@
 
 - No authorisation/authentication
 
-
-
-
-
 # My Approach
 - Due to the issues listed above, I started from scratch with a new solution
 
@@ -63,6 +59,7 @@ would normally give.
 
 - I have added logging to file for the purposes of this exercise, however in a production environment I would use Azure Application Insights or something similar
 
+- I added paged results for the GET all products/product options endpoints as they could potentially return a large amount of results, which would adversely affect the performance of the system
 
 ## Security
 - Don't display detailed debug information in Production as this gives insight into the system that a hacker may be able to exploit
@@ -73,24 +70,20 @@ would normally give.
 
   -> Swagger requires the Content Security Policy (CSP) to be opened up to allow inline scripts, which opens the API up to Cross Site Scripting (XSS) attacks
 
-## Authentication/Authorisation
+- HTTP requests are redirected to HTTPS - although when deployed to production, HTTP should be disabled
+
+### Authentication/Authorisation
 - Added authentication using OAuth v2 from Azure Active Directory
-- Enabled in Production, to get an access token use: 
+- To get an access token use: 
 
   `curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'client_id=a5b8d992-bf9f-4bc7-9a54-c68a54db1949&scope=api%3A%2F%2F3e7d25c4-8f0b-41dd-9885-9410984b4991/.default&client_secret=1aV7Q~V9TDe4KXc~KpbWqxy0bpae6DmtB2jdw&grant_type=client_credentials' 'https://login.microsoftonline.com/dee93494-4996-4929-ac33-83043d5f677a/oauth2/v2.0/token'`
 
-  Then when sending a request use it as a bearer token in the authorization header.
+  Then when sending a request use it as a bearer token in the authorization header. This can be done in development using Swagger.
 
 # Recommendations Before Production Deployment
-1. Add user authentication and authorisation
 1. Upgrade the database to a production ready database such as SQL Server
+1. Add tests for authentication/authorisation (ran out of time)
 1. Setup CI/CD 
-
-
-
-
-
-
 
 # Test Coverage
 To run the tests and generate a coverage report, run the following commands from a command prompt at the root folder level:
